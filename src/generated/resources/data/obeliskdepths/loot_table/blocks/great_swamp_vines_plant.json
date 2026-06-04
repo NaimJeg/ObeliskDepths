@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:match_tool",
+          "predicate": {
+            "items": "minecraft:shears"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "obeliskdepths:great_swamp_vines"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "obeliskdepths:blocks/great_swamp_vines_plant"
+}

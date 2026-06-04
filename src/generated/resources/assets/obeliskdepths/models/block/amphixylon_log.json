@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "obeliskdepths:block/amphixylon_log_top",
+    "side": "obeliskdepths:block/amphixylon_log"
+  }
+}

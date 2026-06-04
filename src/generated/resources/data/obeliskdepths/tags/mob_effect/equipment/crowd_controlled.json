@@ -1,0 +1,9 @@
+{
+  "values": [
+    "minecraft:slowness",
+    "minecraft:blindness",
+    "minecraft:darkness",
+    "minecraft:levitation",
+    "minecraft:weakness"
+  ]
+}

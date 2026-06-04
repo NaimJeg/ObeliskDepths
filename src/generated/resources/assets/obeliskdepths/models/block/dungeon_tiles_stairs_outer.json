@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "obeliskdepths:block/dungeon_tiles",
+    "side": "obeliskdepths:block/dungeon_tiles",
+    "top": "obeliskdepths:block/dungeon_tiles"
+  }
+}

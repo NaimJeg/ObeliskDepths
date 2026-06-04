@@ -1,0 +1,20 @@
+{
+  "values": [
+    "obeliskdepths:reinforced_dungeon_stone",
+    "obeliskdepths:dungeon_tiles",
+    "obeliskdepths:dungeon_cracked_tiles",
+    "obeliskdepths:dungeon_cracked_bricks",
+    "obeliskdepths:dungeon_stone",
+    "obeliskdepths:dungeon_stone_slab",
+    "obeliskdepths:dungeon_stone_stairs",
+    "obeliskdepths:dungeon_stone_wall",
+    "obeliskdepths:dungeon_bricks",
+    "obeliskdepths:dungeon_bricks_slab",
+    "obeliskdepths:dungeon_bricks_stairs",
+    "obeliskdepths:dungeon_bricks_wall",
+    "obeliskdepths:dungeon_tiles",
+    "obeliskdepths:dungeon_tiles_slab",
+    "obeliskdepths:dungeon_tiles_stairs",
+    "obeliskdepths:dungeon_tiles_wall"
+  ]
+}

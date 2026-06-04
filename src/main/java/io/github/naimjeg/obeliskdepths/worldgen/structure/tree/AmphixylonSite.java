@@ -1,0 +1,50 @@
+package io.github.naimjeg.obeliskdepths.worldgen.structure.tree;
+
+import io.github.naimjeg.obeliskdepths.worldgen.GreatSwampCavernProfile;
+
+import net.minecraft.core.BlockPos;
+
+public record AmphixylonSite(
+        int centerX,
+        int centerZ,
+        int minY,
+        int maxY,
+        int maxRadius,
+        long treeSeed
+) {
+    public static final int MIN_RADIUS = 72;
+    public static final int MAX_RADIUS = 96;
+    public static final int MIN_HORIZONTAL_REACH = MIN_RADIUS;
+    public static final int MAX_HORIZONTAL_REACH = MAX_RADIUS;
+    public static final int LOWER_MARGIN = GreatSwampCavernProfile.TREE_LOWER_MARGIN;
+    public static final int UPPER_MARGIN = GreatSwampCavernProfile.TREE_UPPER_MARGIN;
+
+    public AmphixylonSite {
+        if (minY >= maxY) {
+            throw new IllegalArgumentException("Tree minY must be below maxY");
+        }
+        if (maxRadius < 1) {
+            throw new IllegalArgumentException("Tree maxRadius must be positive");
+        }
+    }
+
+    public int height() {
+        return this.maxY - this.minY;
+    }
+
+    public int waistY() {
+        return this.minY + this.height() / 2;
+    }
+
+    public int symmetryY() {
+        return this.waistY();
+    }
+
+    public int horizontalReach() {
+        return this.maxRadius;
+    }
+
+    public BlockPos centerPosAtWaist() {
+        return new BlockPos(this.centerX, this.waistY(), this.centerZ);
+    }
+}

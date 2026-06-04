@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": "minecraft:diamond",
+    "E": "minecraft:echo_shard",
+    "P": "minecraft:paper",
+    "S": "minecraft:netherite_upgrade_smithing_template"
+  },
+  "pattern": [
+    "DED",
+    "ESP",
+    "DED"
+  ],
+  "result": {
+    "id": "obeliskdepths:tempering_smithing_template"
+  }
+}

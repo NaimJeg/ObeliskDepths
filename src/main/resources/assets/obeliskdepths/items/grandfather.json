@@ -1,0 +1,21 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:display_context",
+
+    "cases": [
+      {
+        "when": "gui",
+        "model": {
+          "type": "minecraft:model",
+          "model": "obeliskdepths:item/grandfather_gui"
+        }
+      }
+    ],
+
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "obeliskdepths:item/grandfather"
+    }
+  }
+}

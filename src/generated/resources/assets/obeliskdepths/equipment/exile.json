@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "obeliskdepths:exile/outer"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "obeliskdepths:exile/inner"
+      }
+    ]
+  }
+}

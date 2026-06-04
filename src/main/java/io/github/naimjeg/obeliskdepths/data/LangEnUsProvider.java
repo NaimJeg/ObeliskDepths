@@ -1,0 +1,766 @@
+package io.github.naimjeg.obeliskdepths.data;
+
+import io.github.naimjeg.obeliskdepths.ObeliskDepths;
+import io.github.naimjeg.obeliskdepths.registry.ModBlocks;
+import io.github.naimjeg.obeliskdepths.registry.ModItems;
+import net.minecraft.data.PackOutput;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.common.data.LanguageProvider;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredItem;
+
+import java.util.Locale;
+import java.util.Set;
+
+public final class LangEnUsProvider extends LanguageProvider {
+    private static final String LOCALE = "en_us";
+
+    /*
+     * IDs excluded from automatic block name generation.
+     *
+     * Use this when:
+     * - the generated name is awkward,
+     * - the block should be hidden,
+     * - the block needs a lore-specific display name,
+     * - or the block should be translated manually.
+     */
+    private static final Set<Identifier> EXCLUDED_BLOCK_IDS = Set.of(
+            // Example:
+            // ModBlocks.DUNGEON_VINE.getId()
+    );
+
+    /*
+     * IDs excluded from automatic item name generation.
+     *
+     * BlockItem translations are usually covered by addBlock(...).
+     * This list is mostly for standalone items from ModItems.
+     */
+    private static final Set<Identifier> EXCLUDED_ITEM_IDS = Set.of(
+            // Example:
+            // ModItems.TEMPERING_SMITHING_TEMPLATE.getId()
+    );
+
+    public LangEnUsProvider(PackOutput output) {
+        super(output, ObeliskDepths.MOD_ID, LOCALE);
+    }
+
+    @Override
+    protected void addTranslations() {
+        addCreativeTabs();
+
+        addGeneratedBlockNames();
+
+        addGeneratedItemNames();
+
+        addManualOverrides();
+
+        addUniqueEquipment();
+    }
+
+    private void addCreativeTabs() {
+        add(
+                "itemGroup." + ObeliskDepths.MOD_ID + ".building_blocks",
+                "Obelisk Depths Building Blocks"
+        );
+
+        add(
+                "itemGroup." + ObeliskDepths.MOD_ID + ".obelisk_items",
+                "Obelisk Depths Items"
+        );
+    }
+
+    private void addGeneratedBlockNames() {
+        addGeneratedBlock(ModBlocks.OBELISK);
+        addGeneratedBlock(ModBlocks.OBELISK_CHEST);
+        addGeneratedBlock(ModBlocks.OBELISK_SMITHING_TABLE);
+
+        ModBlocks.STONE_BLOCK_SETS.forEach(set ->
+                set.blocks().forEach(this::addGeneratedBlock)
+        );
+
+        addGeneratedBlock(ModBlocks.REINFORCED_DUNGEON_STONE);
+        addGeneratedBlock(ModBlocks.DUNGEON_CRACKED_TILES);
+        addGeneratedBlock(ModBlocks.DUNGEON_CRACKED_BRICKS);
+
+        addGeneratedBlock(ModBlocks.GREAT_SWAMP_GRASS_BLOCK);
+        addGeneratedBlock(ModBlocks.GREAT_SWAMP_COARSE_DIRT);
+        addGeneratedBlock(ModBlocks.GREAT_SWAMP_MUD);
+        addGeneratedBlock(ModBlocks.GREAT_SWAMP_DIRT);
+        //addGeneratedBlock(ModBlocks.GREAT_SWAMP_ROOTED_DIRT);
+        addGeneratedBlock(ModBlocks.GREAT_SWAMP_VINES);
+        ModBlocks.WOOD_BLOCK_SETS.forEach(set -> {
+            set.blocks().forEach(this::addGeneratedBlock);
+//            addGeneratedItem(set.signItem());
+//            addGeneratedItem(set.hangingSignItem());
+        });
+        addGeneratedBlock(ModBlocks.AMPHIXYLON_ROOT_TANGLE);
+        addGeneratedBlock(ModBlocks.AMPHIXYLON_VINE_BULB);
+
+        addGeneratedBlock(ModBlocks.DUNGEON_LAMP);
+        addGeneratedBlock(ModBlocks.LIT_DUNGEON_LAMP);
+    }
+
+    private void addGeneratedItemNames() {
+        addGeneratedItem(ModItems.RETURN_SCROLL);
+        ModItems.EXILE_ARMOR.forEach(this::addGeneratedItem);
+    }
+
+    private void addUniqueEquipment() {
+        addUniqueEquipment(
+                "grandfather",
+                "The Grandfather",
+                java.util.List.of(
+                        "+50% damage when the final critical result is true"
+                ),
+                "An ancestral blade whose verdict outlives every wielder."
+        );
+        addUniqueEquipment(
+                "harlequin_crest",
+                "Harlequin Crest",
+                java.util.List.of("10% damage reduction"),
+                "A mocking crown that turns mortal blows into hollow threats."
+        );
+        addUniqueEquipment(
+                "tyraels_might",
+                "Tyrael's Might",
+                java.util.List.of(
+                        "+10 resistance rating to all supported damage channels",
+                        "+4 magic damage while above 99% health"
+                ),
+                "Justice is heaviest when carried without fear."
+        );
+        addUniqueEquipment(
+                "tibaults_will",
+                "Tibault's Will",
+                java.util.List.of("20% more damage while Unstoppable"),
+                "Defiance becomes momentum when restraint falls away."
+        );
+        addUniqueEquipment(
+                "blood_moon_breeches",
+                "Blood Moon Breeches",
+                java.util.List.of("20% more damage against Cursed targets"),
+                "Beneath a red moon, every curse opens a deeper wound."
+        );
+        addUniqueEquipment(
+                "cowl_of_the_nameless",
+                "Cowl of the Nameless",
+                java.util.List.of(
+                        "15% more damage against Crowd-Controlled targets"
+                ),
+                "Those stripped of motion soon surrender their names as well."
+        );
+    }
+
+    private void addManualOverrides() {
+
+        add(ModItems.TEMPERING_SMITHING_TEMPLATE.get(), "Tempering Upgrade");
+        add(
+                "container.obeliskdepths.obelisk_tempering",
+                "Obelisk Tempering"
+        );
+        add(
+                "gui.obeliskdepths.tempering.invalid_recipe",
+                "No matching tempering recipe"
+        );
+        add(
+                "gui.obeliskdepths.tempering.directions",
+                "Directions"
+        );
+        add(
+                "gui.obeliskdepths.tempering.possible_affixes",
+                "Possible Affixes"
+        );
+        add(
+                "gui.obeliskdepths.tempering.preview_unavailable",
+                "Pool preview unavailable"
+        );
+        add(
+                "gui.obeliskdepths.tempering.no_possible_affixes",
+                "No possible affixes"
+        );
+        add(
+                "tempering_direction.obeliskdepths.balance",
+                "Balance"
+        );
+        add(
+                "tempering_direction.obeliskdepths.balance.description",
+                "Steady equipment tempering with reliable general damage."
+        );
+        add(
+                "tempering_direction.obeliskdepths.edge",
+                "Edge"
+        );
+        add(
+                "tempering_direction.obeliskdepths.edge.description",
+                "Physical offense, armor pressure, and finishing power."
+        );
+        add(
+                "tempering_direction.obeliskdepths.flame",
+                "Flame"
+        );
+        add(
+                "tempering_direction.obeliskdepths.flame.description",
+                "Fire damage and burning-target pressure."
+        );
+        add(
+                "tempering_direction.obeliskdepths.frost",
+                "Frost"
+        );
+        add(
+                "tempering_direction.obeliskdepths.frost.description",
+                "Cold damage and physical-to-cold conversion."
+        );
+        add(
+                "tempering_direction.obeliskdepths.storm",
+                "Storm"
+        );
+        add(
+                "tempering_direction.obeliskdepths.storm.description",
+                "Lightning and kinetic damage for forceful strikes."
+        );
+        add(
+                "tempering_direction.obeliskdepths.arcane",
+                "Arcane"
+        );
+        add(
+                "tempering_direction.obeliskdepths.arcane.description",
+                "Magic damage and spellblade-style damage gains."
+        );
+        add(
+                "tempering_direction.obeliskdepths.venom",
+                "Venom"
+        );
+        add(
+                "tempering_direction.obeliskdepths.venom.description",
+                "Poison, wither, and additional toxic damage."
+        );
+        add(
+                "tempering_direction.obeliskdepths.precision",
+                "Precision"
+        );
+        add(
+                "tempering_direction.obeliskdepths.precision.description",
+                "Critical hits and opening-strike pressure."
+        );
+        add(
+                "tempering_direction.obeliskdepths.hunt",
+                "Hunt"
+        );
+        add(
+                "tempering_direction.obeliskdepths.hunt.description",
+                "Boss hunting and weakened-target execution."
+        );
+        add(
+                "tooltip.obeliskdepths.tempering_template.tier",
+                "Tempering Tier: %s"
+        );
+        add(
+                "tooltip.obeliskdepths.tempering_template.weight",
+                "Tempering Weight: %s"
+        );
+        addTemperingEntry(
+                "tempered",
+                "Tempered",
+                "+3 physical damage",
+                "A steady strike mark with no fragile condition."
+        );
+        addTemperingEntry(
+                "brutal",
+                "Brutal",
+                "+10% global damage",
+                "A blunt force mark that pushes every hit harder."
+        );
+        addTemperingEntry(
+                "razor_edged",
+                "Razor Edged",
+                "+12% physical damage",
+                "A clean edge mark for weapons that solve problems directly."
+        );
+        addTemperingEntry(
+                "piercing",
+                "Piercing",
+                "+1.5 physical true damage",
+                "A narrow point of force that slips past mitigation."
+        );
+        addTemperingEntry(
+                "sundering",
+                "Sundering",
+                "Target armor effectiveness -12%",
+                "A breaker mark that makes armor answer less loudly."
+        );
+        addTemperingEntry(
+                "executioners",
+                "Executioner's",
+                "+20% physical damage below 35% target health",
+                "A finishing mark that leans into a weakened enemy."
+        );
+        addTemperingEntry(
+                "flaming",
+                "Flaming",
+                "+3 fire damage",
+                "A direct ember mark that adds reliable fire damage."
+        );
+        addTemperingEntry(
+                "flameforged",
+                "Flameforged",
+                "Converts 20% physical damage to fire",
+                "A furnace-born mark that changes part of the blade's bite."
+        );
+        addTemperingEntry(
+                "smoldering",
+                "Smoldering",
+                "+15% global damage against burning targets",
+                "A patient heat mark that rewards keeping enemies burning."
+        );
+        addTemperingEntry(
+                "frostbound",
+                "Frostbound",
+                "+3 cold damage",
+                "A cold mark that lays winter into the weapon's edge."
+        );
+        addTemperingEntry(
+                "frostforged",
+                "Frostforged",
+                "Converts 20% physical damage to cold",
+                "A pale forge mark that turns impact into chill."
+        );
+        addTemperingEntry(
+                "stormcharged",
+                "Stormcharged",
+                "+3 lightning damage",
+                "A charged mark that snaps through the strike."
+        );
+        addTemperingEntry(
+                "stormforged",
+                "Stormforged",
+                "Converts 18% physical damage to lightning",
+                "A storm mark that turns force into a hard flash."
+        );
+        addTemperingEntry(
+                "impacting",
+                "Impacting",
+                "+2.5 kinetic damage",
+                "A concussive mark that adds blunt momentum."
+        );
+        addTemperingEntry(
+                "arcane",
+                "Arcane",
+                "+3 magic damage",
+                "A focused sigil that threads magic through the hit."
+        );
+        addTemperingEntry(
+                "spellblade",
+                "Spellblade",
+                "Gain 15% physical damage as additional magic damage",
+                "A blade-and-sigil mark that echoes force as magic."
+        );
+        addTemperingEntry(
+                "venomous",
+                "Venomous",
+                "+3 poison damage",
+                "A toxin mark that leaves a bitter cut."
+        );
+        addTemperingEntry(
+                "toxic_edge",
+                "Toxic Edge",
+                "Gain 15% physical damage as additional poison damage",
+                "A coated-edge mark that makes clean cuts turn toxic."
+        );
+        addTemperingEntry(
+                "withering",
+                "Withering",
+                "+2 wither damage",
+                "A fading mark that carries a dry, ruinous bite."
+        );
+        addTemperingEntry(
+                "deadly",
+                "Deadly",
+                "+20% physical damage when the final critical result is true",
+                "A precise mark that rewards decisive timing."
+        );
+        addTemperingEntry(
+                "ambushers",
+                "Ambusher's",
+                "+18% global damage above 80% target health",
+                "An opening-strike mark made for the first clean hit."
+        );
+        addTemperingEntry(
+                "giant_slayers",
+                "Giant Slayer's",
+                "+20% global damage against bosses",
+                "A hunter's mark built for targets that should not stand."
+        );
+        addTemperingEntry(
+                "fire_edge",
+                "Fire Edge",
+                "+4 fire damage",
+                "A tempering mark that burns through the weapon edge."
+        );
+        add(
+                "entry.obeliskdepths.fire_edge.tooltip.1",
+                "+15% fire damage"
+        );
+        addTemperingEntry(
+                "critical_edge",
+                "Critical Edge",
+                "+20% physical damage when the final critical result is true",
+                "A tempering mark that rewards clean decisive strikes."
+        );
+
+        add(
+                "container.obeliskdepths.obelisk_portal",
+                "Obelisk Portal"
+        );
+        add(
+                "gui.obeliskdepths.portal.mode.starter_only",
+                "Starter Only"
+        );
+        add(
+                "gui.obeliskdepths.portal.mode.open",
+                "Open"
+        );
+        add(
+                "gui.obeliskdepths.portal.mode.starter_only.tooltip",
+                "Only the player who opened this portal can enter."
+        );
+        add(
+                "gui.obeliskdepths.portal.mode.open.tooltip",
+                "Any player who reaches this portal can enter while it remains active."
+        );
+        add(
+                "gui.obeliskdepths.portal.start",
+                "Start"
+        );
+        add(
+                "gui.obeliskdepths.portal.tribute",
+                "Tribute"
+        );
+        add(
+                "gui.obeliskdepths.portal.selected.starter_only",
+                "Selected: Starter-only portal"
+        );
+        add(
+                "gui.obeliskdepths.portal.selected.open",
+                "Selected: Open portal"
+        );
+        add("gui.obeliskdepths.dungeon_loading.title", "Entering dungeon");
+        add("gui.obeliskdepths.dungeon_loading.awaiting_client", "Opening loading screen...");
+        add("gui.obeliskdepths.dungeon_loading.preparing", "Preparing dungeon entrance...");
+        add("gui.obeliskdepths.dungeon_loading.ready", "Destination ready...");
+        add("gui.obeliskdepths.dungeon_loading.teleporting", "Entering dungeon...");
+        add("gui.obeliskdepths.dungeon_loading.finalizing", "Finalizing dungeon entry...");
+        add("gui.obeliskdepths.dungeon_loading.completed", "Dungeon entry complete.");
+        add("gui.obeliskdepths.dungeon_loading.failed", "Dungeon entry failed.");
+        add("gui.obeliskdepths.dungeon_loading.cancelled", "Dungeon entry cancelled.");
+        add(
+                "gui.obeliskdepths.portal.failed",
+                "Activation failed."
+        );
+        add(
+                "gui.obeliskdepths.portal.cancelled",
+                "Activation cancelled."
+        );
+        add("gui.obeliskdepths.portal.stage.queued", "Queued...");
+        add("gui.obeliskdepths.portal.stage.validating", "Validating...");
+        add("gui.obeliskdepths.portal.stage.scanning", "Scanning sites...");
+        add("gui.obeliskdepths.portal.stage.selecting", "Selecting site...");
+        add("gui.obeliskdepths.portal.stage.generating_start", "Generating start...");
+        add("gui.obeliskdepths.portal.stage.requesting_start", "Requesting entrance chunk...");
+        add("gui.obeliskdepths.portal.stage.waiting_start", "Preparing entrance chunk...");
+        add("gui.obeliskdepths.portal.stage.reading_start", "Reading structure...");
+        add("gui.obeliskdepths.portal.stage.preparing_entry", "Preparing entry...");
+        add("gui.obeliskdepths.portal.stage.planning_entry", "Planning entrance chunks...");
+        add("gui.obeliskdepths.portal.stage.requesting_entry", "Requesting entrance chunks...");
+        add("gui.obeliskdepths.portal.stage.waiting_entry", "Preparing entrance chunks...");
+        add("gui.obeliskdepths.portal.stage.validating_chunks", "Validating entrance chunks...");
+        add("gui.obeliskdepths.portal.stage.validating_entry", "Validating destination...");
+        add("gui.obeliskdepths.portal.stage.ready_to_commit", "Finalizing...");
+        add("gui.obeliskdepths.portal.stage.committing", "Opening portal...");
+        add("gui.obeliskdepths.portal.stage.ready", "Ready.");
+        add("gui.obeliskdepths.portal.stage.unknown", "Preparing dungeon...");
+        add("gui.obeliskdepths.portal.stage.scanning.progress", "Locating dungeon: %1$s / %2$s");
+        add("gui.obeliskdepths.portal.stage.entry_chunks.progress", "Preparing entrance chunks: %1$s / %2$s");
+        add("gui.obeliskdepths.portal.stage.validating_entry.progress", "Validating destination: %1$s / %2$s");
+        add("gui.obeliskdepths.portal.stage.generation.progress", "Preparing site: %1$s / %2$s");
+        add("gui.obeliskdepths.portal.failed.invalid_tribute", "Invalid tribute.");
+        add("gui.obeliskdepths.portal.failed.no_site", "No site available.");
+        add("gui.obeliskdepths.portal.failed.non_authoritative_site", "Site metadata invalid.");
+        add("gui.obeliskdepths.portal.failed.site_conflict", "Site was claimed.");
+        add("gui.obeliskdepths.portal.failed.chunk_load", "Chunk preparation failed.");
+        add("gui.obeliskdepths.portal.failed.structure_missing", "Structure was not found.");
+        add("gui.obeliskdepths.portal.failed.structure_invalid", "Structure metadata invalid.");
+        add("gui.obeliskdepths.portal.failed.entry_validation", "Destination validation failed.");
+        add("gui.obeliskdepths.portal.failed.commit_validation", "Activation changed before commit.");
+        add("gui.obeliskdepths.portal.failed.portal_spawn", "Portal creation failed.");
+        add("gui.obeliskdepths.portal.failed.prepared_entry", "Prepared entry registration failed.");
+        add("gui.obeliskdepths.portal.failed.site_claim_lost", "Dungeon site claim was lost.");
+        add("gui.obeliskdepths.portal.failed.internal", "Internal activation error.");
+        add("gui.obeliskdepths.portal.failed.runtime_unavailable", "Dungeon preparation is no longer available.");
+        add("gui.obeliskdepths.portal.failed.job_missing", "Dungeon preparation state was lost.");
+        add("gui.obeliskdepths.portal.failed.submission_rejected", "Dungeon preparation request was rejected.");
+        add("gui.obeliskdepths.portal.cancelled.user", "Activation cancelled.");
+        add("gui.obeliskdepths.portal.cancelled.player_disconnected", "Player disconnected.");
+        add("gui.obeliskdepths.portal.cancelled.dimension_changed", "Dimension changed.");
+        add("gui.obeliskdepths.portal.cancelled.moved_too_far", "Moved too far away.");
+        add("gui.obeliskdepths.portal.cancelled.player_died", "Preparation cancelled on death.");
+        add("gui.obeliskdepths.portal.cancelled.obelisk_invalid", "Obelisk became invalid.");
+        add("gui.obeliskdepths.portal.cancelled.menu_closed", "Menu closed.");
+        add("gui.obeliskdepths.portal.cancelled.level_unloaded", "Dungeon level unloaded.");
+        add("gui.obeliskdepths.portal.cancelled.server_stopping", "Server stopping.");
+        add("gui.obeliskdepths.portal.cancelled.timeout", "Preparation timed out.");
+        add(
+                "event.obeliskdepths.dungeon_raid",
+                "Dungeon Raid — Kills %1$s/%2$s"
+        );
+        add(
+                "message.obeliskdepths.obelisk.no_dimension",
+                "ObeliskDepths dimension was not found."
+        );
+        add(
+                "message.obeliskdepths.obelisk.inside_dungeon_denied",
+                "Obelisks cannot be used inside the dungeon."
+        );
+        add(
+                "message.obeliskdepths.obelisk.invalid_tribute",
+                "Invalid tribute."
+        );
+        add(
+                "message.obeliskdepths.obelisk.invalid_obelisk",
+                "The obelisk is no longer valid."
+        );
+        add(
+                "message.obeliskdepths.obelisk.activation_failed",
+                "Failed to open dungeon."
+        );
+        add(
+                "message.obeliskdepths.portal.opened",
+                "Dungeon portal opened. Step into the portal to enter."
+        );
+        add(
+                "message.obeliskdepths.portal.no_anchor",
+                "No safe place was found for the dungeon portal."
+        );
+        add(
+                "message.obeliskdepths.portal.no_site",
+                "No unreached dungeon site was found nearby."
+        );
+        add(
+                "message.obeliskdepths.portal.spawn_failed",
+                "Failed to create the dungeon portal."
+        );
+        add(
+                "message.obeliskdepths.portal.entry.success",
+                "Entered dungeon."
+        );
+        add(
+                "message.obeliskdepths.portal.entry.session_missing",
+                "This dungeon portal is no longer active."
+        );
+        add(
+                "message.obeliskdepths.portal.entry.session_expired",
+                "This dungeon portal has expired."
+        );
+        add(
+                "message.obeliskdepths.portal.entry.instance_missing",
+                "This dungeon is no longer available."
+        );
+        add(
+                "message.obeliskdepths.portal.entry.access_denied",
+                "You cannot enter this dungeon portal."
+        );
+        add(
+                "message.obeliskdepths.portal.entry.bound_elsewhere",
+                "You are already bound to another dungeon."
+        );
+        add(
+                "message.obeliskdepths.portal.entry.destination_not_prepared",
+                "This dungeon portal is not ready."
+        );
+        add(
+                "message.obeliskdepths.portal.entry.destination_stabilizing",
+                "The dungeon entrance is stabilizing."
+        );
+        add(
+                "message.obeliskdepths.portal.entry.destination_unavailable",
+                "No safe dungeon entry position is available."
+        );
+        add(
+                "message.obeliskdepths.portal.entry.registration_failed",
+                "Failed to register dungeon entry."
+        );
+        add(
+                "message.obeliskdepths.portal.entry.teleport_failed",
+                "Failed to enter the dungeon."
+        );
+        add(
+                "message.obeliskdepths.portal.entry.wrong_source_dimension",
+                "This dungeon portal belongs to another dimension."
+        );
+        add(
+                "message.obeliskdepths.portal.entry.operation_started",
+                "Dungeon entry started."
+        );
+        add(
+                "message.obeliskdepths.portal.entry.operation_active",
+                "Dungeon entry is already in progress."
+        );
+        add(
+                "message.obeliskdepths.portal.entry.portal_invalid",
+                "The dungeon portal is no longer valid."
+        );
+        add(
+                "message.obeliskdepths.portal.entry.client_not_ready",
+                "The dungeon loading screen did not open in time."
+        );
+        add(
+                "message.obeliskdepths.portal.entry.preparation_failed",
+                "Failed to prepare the dungeon entrance."
+        );
+        add(
+                "message.obeliskdepths.portal.entry.player_unavailable",
+                "Dungeon entry was cancelled because the player became unavailable."
+        );
+        add(
+                "message.obeliskdepths.dungeon.encounter_failed",
+                "The dungeon encounter failed. Returning you to safety."
+        );
+        add(
+                "message.obeliskdepths.dungeon.boundary_warning",
+                "You are outside your dungeon boundary."
+        );
+        add(
+                "message.obeliskdepths.return_scroll.not_in_depths",
+                "The scroll only answers from within the Obelisk Depths."
+        );
+        add(
+                "message.obeliskdepths.return_scroll.no_binding",
+                "No active dungeon return point is bound to you."
+        );
+        add(
+                "message.obeliskdepths.return_scroll.incomplete_data",
+                "Your dungeon return point is incomplete."
+        );
+        add(
+                "message.obeliskdepths.return_scroll.return_level_missing",
+                "The stored return dimension is unavailable."
+        );
+        add(
+                "message.obeliskdepths.return_scroll.dungeon_level_missing",
+                "The Obelisk Depths dimension is unavailable."
+        );
+        add(
+                "message.obeliskdepths.return_scroll.teleport_failed",
+                "The return failed."
+        );
+        add(
+                "message.obeliskdepths.return_scroll.success",
+                "Returned from the Obelisk Depths."
+        );
+        add(
+                "message.obeliskdepths.return_scroll.emergency_fallback",
+                "Returned from the Obelisk Depths using an emergency destination."
+        );
+        add(
+                "message.obeliskdepths.return_scroll.no_safe_destination",
+                "No safe return destination is available."
+        );
+        /*
+         * Manual translations go here.
+         *
+         * Do not add a key here if it was already generated above,
+         * because LanguageProvider throws on duplicate translation keys.
+         */
+
+        // Example:
+        // add(ModBlocks.OBELISK.get(), "Depth Obelisk");
+
+        // Example:
+        // add(ModItems.TEMPERING_SMITHING_TEMPLATE.get(), "Obelisk Tempering Smithing Template");
+    }
+
+    private void addGeneratedBlock(DeferredBlock<? extends Block> block) {
+        Identifier id = block.getId();
+
+        if (EXCLUDED_BLOCK_IDS.contains(id)) {
+            return;
+        }
+
+        addBlock(block, nameFromId(id));
+    }
+
+    private void addGeneratedItem(DeferredItem<? extends Item> item) {
+        Identifier id = item.getId();
+
+        if (EXCLUDED_ITEM_IDS.contains(id)) {
+            return;
+        }
+
+        addItem(item, nameFromId(id));
+    }
+
+    private void addTemperingEntry(
+            String key,
+            String name,
+            String tooltip,
+            String flavor
+    ) {
+        String prefix = "entry." + ObeliskDepths.MOD_ID + "." + key;
+        add(prefix + ".name", name);
+        add(prefix + ".tooltip.0", tooltip);
+        add(prefix + ".flavor", flavor);
+    }
+
+    private void addUniqueEquipment(
+            String key,
+            String name,
+            java.util.List<String> tooltips,
+            String flavor
+    ) {
+        String itemKey = "item." + ObeliskDepths.MOD_ID + ".unique." + key;
+        String entryKey = "entry." + ObeliskDepths.MOD_ID + ".unique." + key;
+        add(itemKey, name);
+        add(entryKey + ".name", name);
+        for (int index = 0; index < tooltips.size(); index++) {
+            add(entryKey + ".tooltip." + index, tooltips.get(index));
+        }
+        add(entryKey + ".flavor", flavor);
+    }
+
+    private static String nameFromId(Identifier id) {
+        return nameFromPath(id.getPath());
+    }
+
+    private static String nameFromPath(String path) {
+        String[] words = path.split("_");
+        StringBuilder result = new StringBuilder();
+
+        for (String word : words) {
+            if (word.isBlank()) {
+                continue;
+            }
+
+            if (!result.isEmpty()) {
+                result.append(' ');
+            }
+
+            result.append(capitalize(word));
+        }
+
+        return result.toString();
+    }
+
+    private static String capitalize(String word) {
+        if (word.isEmpty()) {
+            return word;
+        }
+
+        if (word.length() == 1) {
+            return word.toUpperCase(Locale.ROOT);
+        }
+
+        return word.substring(0, 1).toUpperCase(Locale.ROOT)
+                + word.substring(1).toLowerCase(Locale.ROOT);
+    }
+}

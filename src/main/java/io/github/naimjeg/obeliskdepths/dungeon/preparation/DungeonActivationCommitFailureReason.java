@@ -1,0 +1,15 @@
+package io.github.naimjeg.obeliskdepths.dungeon.preparation;
+
+public enum DungeonActivationCommitFailureReason {
+    PLAYER_OFFLINE,
+    WRONG_SOURCE_DIMENSION,
+    INVALID_OBELISK,
+    INVALID_TRIBUTE,
+    EXISTING_TARGET_UNAVAILABLE,
+    SITE_CONFLICT,
+    NON_AUTHORITATIVE_SITE,
+    PORTAL_SPAWN_FAILED,
+    PREPARED_ENTRY_REGISTRATION_FAILED,
+    SITE_CLAIM_LOST,
+    INTERNAL_ERROR
+}
