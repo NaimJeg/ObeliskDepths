@@ -1,0 +1,36 @@
+{
+  "type": "treasure",
+  "allowed_rotations": [
+    "none",
+    "clockwise_90",
+    "clockwise_180",
+    "counterclockwise_90"
+  ],
+  "anchor": [
+    28,
+    2,
+    15
+  ],
+  "ports": [
+    {
+      "boundary_cell": {
+        "x": 3,
+        "y": 0,
+        "z": 1
+      },
+      "connector_type": "obeliskdepths:connector/basic_floor_passage",
+      "facing": "east",
+      "height_blocks": 4,
+      "id": "east_entry",
+      "opening_min": [
+        31,
+        1,
+        14
+      ],
+      "required": true,
+      "width_blocks": 4
+    }
+  ],
+  "supports_loop_edges": false,
+  "template": "obeliskdepths:dungeon/great_swamp/room/treasure/obelisk_sanctum_01"
+}

@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "obeliskdepths:dungeon_stone",
+  "result": {
+    "id": "obeliskdepths:dungeon_stone_wall"
+  }
+}

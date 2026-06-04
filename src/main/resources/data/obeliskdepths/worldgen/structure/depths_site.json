@@ -1,0 +1,7 @@
+{
+  "type": "obeliskdepths:obelisk_dungeon",
+  "biomes": "#obeliskdepths:has_structure/depths_site",
+  "step": "underground_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none"
+}

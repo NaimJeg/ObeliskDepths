@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "obeliskdepths:block/great_swamp_vines"
+  }
+}

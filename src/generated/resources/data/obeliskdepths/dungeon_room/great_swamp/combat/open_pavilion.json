@@ -1,0 +1,91 @@
+{
+  "type": "combat",
+  "allowed_rotations": [
+    "none",
+    "clockwise_90",
+    "clockwise_180",
+    "counterclockwise_90"
+  ],
+  "anchor": [
+    4,
+    1,
+    4
+  ],
+  "encounter": "obeliskdepths:combat_room",
+  "min_graph_depth": 1,
+  "ports": [
+    {
+      "boundary_cell": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "connector_type": "obeliskdepths:connector/basic_floor_passage",
+      "facing": "north",
+      "height_blocks": 4,
+      "id": "north",
+      "opening_min": [
+        2,
+        1,
+        0
+      ],
+      "required": true,
+      "width_blocks": 4
+    },
+    {
+      "boundary_cell": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "connector_type": "obeliskdepths:connector/basic_floor_passage",
+      "facing": "south",
+      "height_blocks": 4,
+      "id": "south",
+      "opening_min": [
+        2,
+        1,
+        7
+      ],
+      "required": true,
+      "width_blocks": 4
+    },
+    {
+      "boundary_cell": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "connector_type": "obeliskdepths:connector/basic_floor_passage",
+      "facing": "west",
+      "height_blocks": 4,
+      "id": "west",
+      "opening_min": [
+        0,
+        1,
+        2
+      ],
+      "required": true,
+      "width_blocks": 4
+    },
+    {
+      "boundary_cell": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "connector_type": "obeliskdepths:connector/basic_floor_passage",
+      "facing": "east",
+      "height_blocks": 4,
+      "id": "east",
+      "opening_min": [
+        7,
+        1,
+        2
+      ],
+      "required": true,
+      "width_blocks": 4
+    }
+  ],
+  "template": "obeliskdepths:dungeon/great_swamp/room/combat/open_pavilion_01"
+}

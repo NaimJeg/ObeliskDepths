@@ -1,0 +1,11 @@
+{
+  "type": "obeliskdepths:obelisk_depths",
+  "generator": {
+    "type": "minecraft:noise",
+    "biome_source": {
+      "type": "minecraft:fixed",
+      "biome": "obeliskdepths:great_swamp"
+    },
+    "settings": "minecraft:overworld"
+  }
+}

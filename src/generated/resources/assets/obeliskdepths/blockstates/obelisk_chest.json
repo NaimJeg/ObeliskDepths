@@ -1,0 +1,364 @@
+{
+  "variants": {
+    "facing=east,opened=false,part=bottom_back_center": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 90
+    },
+    "facing=east,opened=false,part=bottom_back_left": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 90
+    },
+    "facing=east,opened=false,part=bottom_back_right": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 90
+    },
+    "facing=east,opened=false,part=bottom_front_center": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 90
+    },
+    "facing=east,opened=false,part=bottom_front_left": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 90
+    },
+    "facing=east,opened=false,part=bottom_front_right": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 90
+    },
+    "facing=east,opened=false,part=top_back_center": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 90
+    },
+    "facing=east,opened=false,part=top_back_left": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 90
+    },
+    "facing=east,opened=false,part=top_back_right": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 90
+    },
+    "facing=east,opened=false,part=top_front_center": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 90
+    },
+    "facing=east,opened=false,part=top_front_left": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 90
+    },
+    "facing=east,opened=false,part=top_front_right": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 90
+    },
+    "facing=east,opened=true,part=bottom_back_center": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 90
+    },
+    "facing=east,opened=true,part=bottom_back_left": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 90
+    },
+    "facing=east,opened=true,part=bottom_back_right": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 90
+    },
+    "facing=east,opened=true,part=bottom_front_center": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 90
+    },
+    "facing=east,opened=true,part=bottom_front_left": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 90
+    },
+    "facing=east,opened=true,part=bottom_front_right": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 90
+    },
+    "facing=east,opened=true,part=top_back_center": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 90
+    },
+    "facing=east,opened=true,part=top_back_left": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 90
+    },
+    "facing=east,opened=true,part=top_back_right": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 90
+    },
+    "facing=east,opened=true,part=top_front_center": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 90
+    },
+    "facing=east,opened=true,part=top_front_left": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 90
+    },
+    "facing=east,opened=true,part=top_front_right": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 90
+    },
+    "facing=north,opened=false,part=bottom_back_center": {
+      "model": "obeliskdepths:block/obelisk_chest"
+    },
+    "facing=north,opened=false,part=bottom_back_left": {
+      "model": "obeliskdepths:block/obelisk_chest"
+    },
+    "facing=north,opened=false,part=bottom_back_right": {
+      "model": "obeliskdepths:block/obelisk_chest"
+    },
+    "facing=north,opened=false,part=bottom_front_center": {
+      "model": "obeliskdepths:block/obelisk_chest"
+    },
+    "facing=north,opened=false,part=bottom_front_left": {
+      "model": "obeliskdepths:block/obelisk_chest"
+    },
+    "facing=north,opened=false,part=bottom_front_right": {
+      "model": "obeliskdepths:block/obelisk_chest"
+    },
+    "facing=north,opened=false,part=top_back_center": {
+      "model": "obeliskdepths:block/obelisk_chest"
+    },
+    "facing=north,opened=false,part=top_back_left": {
+      "model": "obeliskdepths:block/obelisk_chest"
+    },
+    "facing=north,opened=false,part=top_back_right": {
+      "model": "obeliskdepths:block/obelisk_chest"
+    },
+    "facing=north,opened=false,part=top_front_center": {
+      "model": "obeliskdepths:block/obelisk_chest"
+    },
+    "facing=north,opened=false,part=top_front_left": {
+      "model": "obeliskdepths:block/obelisk_chest"
+    },
+    "facing=north,opened=false,part=top_front_right": {
+      "model": "obeliskdepths:block/obelisk_chest"
+    },
+    "facing=north,opened=true,part=bottom_back_center": {
+      "model": "obeliskdepths:block/obelisk_chest"
+    },
+    "facing=north,opened=true,part=bottom_back_left": {
+      "model": "obeliskdepths:block/obelisk_chest"
+    },
+    "facing=north,opened=true,part=bottom_back_right": {
+      "model": "obeliskdepths:block/obelisk_chest"
+    },
+    "facing=north,opened=true,part=bottom_front_center": {
+      "model": "obeliskdepths:block/obelisk_chest"
+    },
+    "facing=north,opened=true,part=bottom_front_left": {
+      "model": "obeliskdepths:block/obelisk_chest"
+    },
+    "facing=north,opened=true,part=bottom_front_right": {
+      "model": "obeliskdepths:block/obelisk_chest"
+    },
+    "facing=north,opened=true,part=top_back_center": {
+      "model": "obeliskdepths:block/obelisk_chest"
+    },
+    "facing=north,opened=true,part=top_back_left": {
+      "model": "obeliskdepths:block/obelisk_chest"
+    },
+    "facing=north,opened=true,part=top_back_right": {
+      "model": "obeliskdepths:block/obelisk_chest"
+    },
+    "facing=north,opened=true,part=top_front_center": {
+      "model": "obeliskdepths:block/obelisk_chest"
+    },
+    "facing=north,opened=true,part=top_front_left": {
+      "model": "obeliskdepths:block/obelisk_chest"
+    },
+    "facing=north,opened=true,part=top_front_right": {
+      "model": "obeliskdepths:block/obelisk_chest"
+    },
+    "facing=south,opened=false,part=bottom_back_center": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 180
+    },
+    "facing=south,opened=false,part=bottom_back_left": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 180
+    },
+    "facing=south,opened=false,part=bottom_back_right": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 180
+    },
+    "facing=south,opened=false,part=bottom_front_center": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 180
+    },
+    "facing=south,opened=false,part=bottom_front_left": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 180
+    },
+    "facing=south,opened=false,part=bottom_front_right": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 180
+    },
+    "facing=south,opened=false,part=top_back_center": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 180
+    },
+    "facing=south,opened=false,part=top_back_left": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 180
+    },
+    "facing=south,opened=false,part=top_back_right": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 180
+    },
+    "facing=south,opened=false,part=top_front_center": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 180
+    },
+    "facing=south,opened=false,part=top_front_left": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 180
+    },
+    "facing=south,opened=false,part=top_front_right": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 180
+    },
+    "facing=south,opened=true,part=bottom_back_center": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 180
+    },
+    "facing=south,opened=true,part=bottom_back_left": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 180
+    },
+    "facing=south,opened=true,part=bottom_back_right": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 180
+    },
+    "facing=south,opened=true,part=bottom_front_center": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 180
+    },
+    "facing=south,opened=true,part=bottom_front_left": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 180
+    },
+    "facing=south,opened=true,part=bottom_front_right": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 180
+    },
+    "facing=south,opened=true,part=top_back_center": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 180
+    },
+    "facing=south,opened=true,part=top_back_left": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 180
+    },
+    "facing=south,opened=true,part=top_back_right": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 180
+    },
+    "facing=south,opened=true,part=top_front_center": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 180
+    },
+    "facing=south,opened=true,part=top_front_left": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 180
+    },
+    "facing=south,opened=true,part=top_front_right": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 180
+    },
+    "facing=west,opened=false,part=bottom_back_center": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 270
+    },
+    "facing=west,opened=false,part=bottom_back_left": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 270
+    },
+    "facing=west,opened=false,part=bottom_back_right": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 270
+    },
+    "facing=west,opened=false,part=bottom_front_center": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 270
+    },
+    "facing=west,opened=false,part=bottom_front_left": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 270
+    },
+    "facing=west,opened=false,part=bottom_front_right": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 270
+    },
+    "facing=west,opened=false,part=top_back_center": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 270
+    },
+    "facing=west,opened=false,part=top_back_left": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 270
+    },
+    "facing=west,opened=false,part=top_back_right": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 270
+    },
+    "facing=west,opened=false,part=top_front_center": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 270
+    },
+    "facing=west,opened=false,part=top_front_left": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 270
+    },
+    "facing=west,opened=false,part=top_front_right": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 270
+    },
+    "facing=west,opened=true,part=bottom_back_center": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 270
+    },
+    "facing=west,opened=true,part=bottom_back_left": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 270
+    },
+    "facing=west,opened=true,part=bottom_back_right": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 270
+    },
+    "facing=west,opened=true,part=bottom_front_center": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 270
+    },
+    "facing=west,opened=true,part=bottom_front_left": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 270
+    },
+    "facing=west,opened=true,part=bottom_front_right": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 270
+    },
+    "facing=west,opened=true,part=top_back_center": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 270
+    },
+    "facing=west,opened=true,part=top_back_left": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 270
+    },
+    "facing=west,opened=true,part=top_back_right": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 270
+    },
+    "facing=west,opened=true,part=top_front_center": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 270
+    },
+    "facing=west,opened=true,part=top_front_left": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 270
+    },
+    "facing=west,opened=true,part=top_front_right": {
+      "model": "obeliskdepths:block/obelisk_chest",
+      "y": 270
+    }
+  }
+}

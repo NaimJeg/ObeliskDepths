@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "obeliskdepths:block/stripped_great_swamp_taxodium_log_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "obeliskdepths:block/stripped_great_swamp_taxodium_log"
+    },
+    "axis=z": {
+      "model": "obeliskdepths:block/stripped_great_swamp_taxodium_log_horizontal",
+      "x": 90
+    }
+  }
+}

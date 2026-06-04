@@ -1,0 +1,7 @@
+{
+  "type": "obeliskdepths:great_swamp_hourglass_tree",
+  "biomes": "#obeliskdepths:has_structure/great_swamp_hourglass_tree",
+  "step": "raw_generation",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none"
+}

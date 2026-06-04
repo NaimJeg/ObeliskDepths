@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "obeliskdepths:block/dungeon_tiles_slab"
+    },
+    "type=double": {
+      "model": "obeliskdepths:block/dungeon_tiles"
+    },
+    "type=top": {
+      "model": "obeliskdepths:block/dungeon_tiles_slab_top"
+    }
+  }
+}

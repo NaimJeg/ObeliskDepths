@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "obeliskdepths:block/great_swamp_vines_plant"
+  }
+}

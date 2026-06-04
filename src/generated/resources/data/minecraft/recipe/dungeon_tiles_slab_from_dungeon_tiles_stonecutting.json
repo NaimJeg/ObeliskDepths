@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "obeliskdepths:dungeon_tiles",
+  "result": {
+    "count": 2,
+    "id": "obeliskdepths:dungeon_tiles_slab"
+  }
+}

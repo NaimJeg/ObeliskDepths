@@ -1,0 +1,21 @@
+package io.github.naimjeg.obeliskdepths.dungeon.reward;
+
+public enum DungeonRewardClaimResult {
+    SUCCESS,
+    NOT_SERVER_PLAYER,
+    CHEST_NOT_INITIALIZED,
+    REWARD_NOT_FOUND,
+    INSTANCE_NOT_FOUND,
+    SESSION_NOT_FOUND,
+    ACCESS_DENIED,
+    INSTANCE_NOT_IN_REWARD_PHASE,
+    POSITION_MISMATCH,
+    ID_MISMATCH,
+    ALREADY_CLAIMED,
+    EMPTY_REWARD,
+    INVALID_STRUCTURE,
+    ROOM_MISSING,
+    ROOM_NOT_CLEARED,
+    ALREADY_OPENED,
+    NOT_REWARD_ROOM
+}

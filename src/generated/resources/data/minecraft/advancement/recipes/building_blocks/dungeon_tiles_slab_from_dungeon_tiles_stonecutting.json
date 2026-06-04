@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_dungeon_tiles": {
+      "conditions": {
+        "items": [
+          {
+            "items": "obeliskdepths:dungeon_tiles"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:dungeon_tiles_slab_from_dungeon_tiles_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_dungeon_tiles"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:dungeon_tiles_slab_from_dungeon_tiles_stonecutting"
+    ]
+  }
+}

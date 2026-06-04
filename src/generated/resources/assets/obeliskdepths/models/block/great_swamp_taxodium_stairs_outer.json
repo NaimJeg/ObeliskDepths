@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "obeliskdepths:block/great_swamp_taxodium_planks",
+    "side": "obeliskdepths:block/great_swamp_taxodium_planks",
+    "top": "obeliskdepths:block/great_swamp_taxodium_planks"
+  }
+}
