@@ -8,7 +8,7 @@ plugins {
     id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
 }
 
-includeBuild('libs/DamageNexus') {
+includeBuild('libs/DamageNexus-NeoForge26.1.2') {
     dependencySubstitution {
         substitute module('io.github.naimjeg:damagenexus') using project(':')
     }

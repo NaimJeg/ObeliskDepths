@@ -1,3 +1,4 @@
-[submodule "libs/DamageNexus"]
-	path = libs/DamageNexus
+[submodule "libs/DamageNexus-NeoForge26.1.2"]
+	path = libs/DamageNexus-NeoForge26.1.2
 	url = https://github.com/naimjeg/DamageNexus-NeoForge26.1.2
+    branch = main
