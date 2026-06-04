@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "obeliskdepths:item/great_swamp_taxodium_door"
+  }
+}

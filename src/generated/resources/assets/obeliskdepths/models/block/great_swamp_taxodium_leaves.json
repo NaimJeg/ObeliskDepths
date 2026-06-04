@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/leaves",
+  "textures": {
+    "all": "obeliskdepths:block/great_swamp_taxodium_leaves"
+  }
+}

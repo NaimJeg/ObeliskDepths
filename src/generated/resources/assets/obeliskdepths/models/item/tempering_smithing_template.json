@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "obeliskdepths:item/tempering_smithing_template"
+  }
+}

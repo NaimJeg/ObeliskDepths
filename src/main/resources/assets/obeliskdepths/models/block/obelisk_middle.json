@@ -1,0 +1,52 @@
+{
+	"format_version": "1.21.11",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"obelisk": "obeliskdepths:block/dungeon_tiles",
+		"particle": "obeliskdepths:block/dungeon_tiles"
+	},
+	"elements": [
+		{
+			"from": [1, 13, 1],
+			"to": [15, 15, 15],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-1, 13, -1]},
+			"color": 2,
+			"faces": {
+				"north": {"uv": [0, 0, 14, 2], "texture": "#obelisk"},
+				"east": {"uv": [0, 0, 14, 2], "texture": "#obelisk"},
+				"south": {"uv": [0, 0, 14, 2], "texture": "#obelisk"},
+				"west": {"uv": [0, 0, 14, 2], "texture": "#obelisk"},
+				"up": {"uv": [0, 0, 14, 14], "texture": "#obelisk"},
+				"down": {"uv": [0, 0, 14, 14], "texture": "#obelisk"}
+			}
+		},
+		{
+			"from": [2, 15, 4],
+			"to": [14, 16, 16],
+			"rotation": {"x": 0, "y": 90, "z": 0, "origin": [7, 15, 9]},
+			"color": 2,
+			"faces": {
+				"north": {"uv": [0, 1, 12, 2], "texture": "#obelisk"},
+				"east": {"uv": [0, 1, 12, 2], "texture": "#obelisk"},
+				"south": {"uv": [0, 1, 12, 2], "texture": "#obelisk"},
+				"west": {"uv": [0, 1, 12, 2], "texture": "#obelisk"},
+				"up": {"uv": [0, 0, 12, 12], "texture": "#obelisk"},
+				"down": {"uv": [0, 0, 12, 12], "texture": "#obelisk"}
+			}
+		},
+		{
+			"from": [3, 0, 3],
+			"to": [13, 13, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7, 4, 7]},
+			"color": 7,
+			"faces": {
+				"north": {"uv": [0, 0, 10, 13], "texture": "#obelisk"},
+				"east": {"uv": [0, 0, 10, 13], "texture": "#obelisk"},
+				"south": {"uv": [0, 0, 10, 13], "texture": "#obelisk"},
+				"west": {"uv": [0, 0, 10, 13], "texture": "#obelisk"},
+				"up": {"uv": [0, 0, 10, 10], "texture": "#obelisk"},
+				"down": {"uv": [0, 0, 10, 10], "texture": "#obelisk"}
+			}
+		}
+	]
+}

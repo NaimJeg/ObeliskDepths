@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "planks",
+  "ingredients": [
+    "#obeliskdepths:great_swamp_taxodium_logs"
+  ],
+  "result": {
+    "count": 4,
+    "id": "obeliskdepths:great_swamp_taxodium_planks"
+  }
+}

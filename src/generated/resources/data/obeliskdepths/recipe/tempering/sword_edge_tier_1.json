@@ -1,0 +1,12 @@
+{
+  "type": "obeliskdepths:obelisk_tempering",
+  "directions": [
+    "obeliskdepths:edge"
+  ],
+  "ingredient": "minecraft:echo_shard",
+  "max_rolls": 1,
+  "max_tier": 1,
+  "pool": "obeliskdepths:edge/tier_1",
+  "template": "obeliskdepths:tempering_smithing_template",
+  "weapon": "#obeliskdepths:temperable_weapons"
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "obeliskdepths:block/reinforced_dungeon_stone_top",
+    "side": "obeliskdepths:block/reinforced_dungeon_stone_side"
+  }
+}
