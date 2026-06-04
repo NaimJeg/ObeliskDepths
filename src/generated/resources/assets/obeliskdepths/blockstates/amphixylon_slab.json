@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "obeliskdepths:block/amphixylon_slab"
+    },
+    "type=double": {
+      "model": "obeliskdepths:block/amphixylon_planks"
+    },
+    "type=top": {
+      "model": "obeliskdepths:block/amphixylon_slab_top"
+    }
+  }
+}

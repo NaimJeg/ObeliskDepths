@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_dungeon_bricks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "obeliskdepths:dungeon_bricks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "obeliskdepths:dungeon_bricks_stairs"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_dungeon_bricks"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "obeliskdepths:dungeon_bricks_stairs"
+    ]
+  }
+}

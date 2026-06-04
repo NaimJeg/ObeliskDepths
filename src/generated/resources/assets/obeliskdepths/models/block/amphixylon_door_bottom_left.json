@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom_left",
+  "textures": {
+    "bottom": "obeliskdepths:block/amphixylon_door_bottom",
+    "top": "obeliskdepths:block/amphixylon_door_top"
+  }
+}

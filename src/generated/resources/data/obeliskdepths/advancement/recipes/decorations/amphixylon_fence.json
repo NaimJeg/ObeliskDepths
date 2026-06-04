@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_amphixylon_planks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "obeliskdepths:amphixylon_planks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "obeliskdepths:amphixylon_fence"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_amphixylon_planks"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "obeliskdepths:amphixylon_fence"
+    ]
+  }
+}

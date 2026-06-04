@@ -1,0 +1,13 @@
+package io.github.naimjeg.obeliskdepths.dungeon.player;
+
+public enum PlayerDungeonReturnResult {
+    SUCCESS,
+    SUCCESS_EMERGENCY_FALLBACK,
+    NO_DUNGEON_BINDING,
+    INCOMPLETE_RETURN_DATA,
+    RETURN_LEVEL_MISSING,
+    DUNGEON_LEVEL_MISSING,
+    TELEPORT_FAILED,
+    NOT_IN_DUNGEON_DIMENSION,
+    NO_SAFE_RETURN_DESTINATION
+}

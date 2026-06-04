@@ -1,0 +1,4 @@
+[submodule "libs/DamageNexus"]
+	path = libs/DamageNexus
+	url = https://github.com/NaimJeg/DamageNexus
+    branch = main

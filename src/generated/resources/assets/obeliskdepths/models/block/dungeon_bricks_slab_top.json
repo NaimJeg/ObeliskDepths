@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "obeliskdepths:block/dungeon_bricks",
+    "side": "obeliskdepths:block/dungeon_bricks",
+    "top": "obeliskdepths:block/dungeon_bricks"
+  }
+}

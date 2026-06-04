@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "part=bottom": {
+      "model": "obeliskdepths:block/obelisk_bottom"
+    },
+    "part=middle": {
+      "model": "obeliskdepths:block/obelisk_middle"
+    },
+    "part=top": {
+      "model": "obeliskdepths:block/obelisk_top"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "E": "minecraft:echo_shard",
+    "O": "minecraft:obsidian",
+    "S": "minecraft:smooth_stone",
+    "T": "minecraft:smithing_table"
+  },
+  "pattern": [
+    "OEO",
+    "STS",
+    "OEO"
+  ],
+  "result": {
+    "id": "obeliskdepths:obelisk_smithing_table"
+  }
+}
