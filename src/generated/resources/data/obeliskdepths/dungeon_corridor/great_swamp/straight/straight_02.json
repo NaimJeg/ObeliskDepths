@@ -1,0 +1,48 @@
+{
+  "allowed_rotations": [
+    "none",
+    "clockwise_90",
+    "clockwise_180",
+    "counterclockwise_90"
+  ],
+  "ports": [
+    {
+      "boundary_cell": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "connector_type": "obeliskdepths:connector/basic_floor_passage",
+      "facing": "west",
+      "height_blocks": 1,
+      "id": "west",
+      "opening_min": [
+        0,
+        0,
+        0
+      ],
+      "required": true,
+      "width_blocks": 4
+    },
+    {
+      "boundary_cell": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "connector_type": "obeliskdepths:connector/basic_floor_passage",
+      "facing": "east",
+      "height_blocks": 1,
+      "id": "east",
+      "opening_min": [
+        3,
+        0,
+        0
+      ],
+      "required": true,
+      "width_blocks": 4
+    }
+  ],
+  "shape": "straight",
+  "template": "obeliskdepths:dungeon/great_swamp/corridor/straight/straight_02"
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "bark",
+  "key": {
+    "#": "obeliskdepths:stripped_great_swamp_taxodium_log"
+  },
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "result": {
+    "count": 3,
+    "id": "obeliskdepths:stripped_great_swamp_taxodium_wood"
+  }
+}

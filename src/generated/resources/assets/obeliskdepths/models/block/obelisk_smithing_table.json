@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "obeliskdepths:block/obelisk_smithing_table_bottom",
+    "east": "obeliskdepths:block/obelisk_smithing_table_side",
+    "north": "obeliskdepths:block/obelisk_smithing_table_front",
+    "particle": "obeliskdepths:block/obelisk_smithing_table_front",
+    "south": "obeliskdepths:block/obelisk_smithing_table_front",
+    "up": "obeliskdepths:block/obelisk_smithing_table_top",
+    "west": "obeliskdepths:block/obelisk_smithing_table_side"
+  }
+}

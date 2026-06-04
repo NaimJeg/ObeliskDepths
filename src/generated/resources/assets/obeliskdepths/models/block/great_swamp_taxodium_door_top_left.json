@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_top_left",
+  "textures": {
+    "bottom": "obeliskdepths:block/great_swamp_taxodium_door_bottom",
+    "top": "obeliskdepths:block/great_swamp_taxodium_door_top"
+  }
+}

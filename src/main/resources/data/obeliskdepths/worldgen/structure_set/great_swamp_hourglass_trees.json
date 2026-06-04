@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "obeliskdepths:great_swamp_hourglass_tree",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 18,
+    "separation": 10,
+    "salt": 91827365
+  }
+}

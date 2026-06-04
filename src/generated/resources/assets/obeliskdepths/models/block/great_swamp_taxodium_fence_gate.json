@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_fence_gate",
+  "textures": {
+    "texture": "obeliskdepths:block/great_swamp_taxodium_planks"
+  }
+}
