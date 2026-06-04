@@ -41,6 +41,7 @@ public final class AsyncDungeonSiteProbeTest {
         completionMailboxDrainIsBounded();
         workerCompletionUsesMailboxWithoutOwnerDispatch();
         ownerDispatchRejectionTerminatesThroughMailbox();
+        permitPoolFullPausesUntilCompletionReleases();
         wrongThreadPublicMutationIsRejected();
         externalFutureCompletionCannotCompleteAuthoritativeFuture();
 
@@ -429,6 +430,34 @@ public final class AsyncDungeonSiteProbeTest {
         DungeonSiteProbeReport report = completedReport(scanner);
         check(report.failedCount() == 1,
                 "rejection mailbox: candidate terminates as failed");
+    }
+
+    private static void permitPoolFullPausesUntilCompletionReleases() {
+        ControlledProbeBackend backend = new ControlledProbeBackend();
+        AsyncDungeonSiteProbe scanner = scanner(backend, 3, 2);
+        DungeonPersistedProbePermitPool permits =
+                new DungeonPersistedProbePermitPool(1);
+        scanner.start();
+        scanner.advanceSubmissions(3, 3, 3, permits);
+
+        check(backend.probeCalls() == 1, "permit full: first submission only");
+        check(permits.outstandingCount() == 1,
+                "permit full: first permit held");
+
+        scanner.advanceSubmissions(3, 3, 3, permits);
+        check(backend.probeCalls() == 1,
+                "permit full: occupied pool blocks submission");
+
+        backend.completeAvailable(0);
+        check(permits.outstandingCount() == 0,
+                "permit full: completion releases permit");
+        scanner.drainCompletionMailbox(1);
+        scanner.advanceSubmissions(3, 3, 3, permits);
+
+        check(backend.probeCalls() == 2,
+                "permit full: later advance submits replacement");
+        check(permits.outstandingCount() == 1,
+                "permit full: replacement holds permit");
     }
 
     private static void wrongThreadPublicMutationIsRejected() {

@@ -48,6 +48,8 @@ public final class DungeonPreparationJobExecutorTest {
    public static void main(String[] args) {
        queuedTickOnlyAdvancesToValidating();
        validatingStartsBoundedPersistedScanner();
+        submissionBudgetOneSubmitsAtMostOnePerTick();
+        inFlightLimitOneSubmitsOnlyAfterCompletion();
         scannerReportPublishesDuringBudgetedMailboxDrain();
        persistedSuccessPathRetainsStartLeaseAndResolvedSite();
        noPersistedSitesStopsAtOrderedGenerationCandidateSelection();
@@ -117,8 +119,121 @@ public final class DungeonPreparationJobExecutorTest {
         check(harness.backend.probeBackend(0).probeCalls() == 0,
                 "validating: scanner start performs no submissions");
         harness.boundedTick();
-        check(harness.backend.probeBackend(0).probeCalls() == 3,
+        DungeonAsyncTestSupport.ControlledProbeBackend probe =
+                harness.backend.probeBackend(0);
+        check(probe.probeCalls() == 3,
                 "scanning: all candidates submitted below default bound");
+        check(probe.probeCalls()
+                        < DungeonPreparationLimits
+                                .PERSISTED_PROBE_SUBMISSIONS_PER_LEVEL_TICK,
+                "scanning: below default submission bound");
+        check(probe.probeCalls()
+                        < DungeonPreparationLimits
+                                .MAX_IN_FLIGHT_PERSISTED_PROBES_PER_LEVEL,
+                "scanning: below default in-flight bound");
+    }
+
+    private static void submissionBudgetOneSubmitsAtMostOnePerTick() {
+        Harness harness = Harness.withCandidates(3);
+        harness.tick();
+        harness.executor.tick(
+                harness.job,
+                productionBudget(
+                        1,
+                        DungeonPreparationLimits
+                                .MAX_IN_FLIGHT_PERSISTED_PROBES_PER_LEVEL
+                )
+        );
+
+        check(harness.job.stage()
+                        == DungeonPreparationStage.SCANNING_EXISTING_SITES,
+                "submission budget: scanner starts");
+        check(harness.backend.probeBackend(0).probeCalls() == 0,
+                "submission budget: start performs no submissions");
+
+        harness.executor.tick(
+                harness.job,
+                productionBudget(
+                        1,
+                        DungeonPreparationLimits
+                                .MAX_IN_FLIGHT_PERSISTED_PROBES_PER_LEVEL
+                )
+        );
+        check(harness.backend.probeBackend(0).probeCalls() == 1,
+                "submission budget: one per scanning tick");
+
+        harness.executor.tick(
+                harness.job,
+                productionBudget(
+                        1,
+                        DungeonPreparationLimits
+                                .MAX_IN_FLIGHT_PERSISTED_PROBES_PER_LEVEL
+                )
+        );
+        check(harness.backend.probeBackend(0).probeCalls() == 2,
+                "submission budget: next tick receives next allowance");
+    }
+
+    private static void inFlightLimitOneSubmitsOnlyAfterCompletion() {
+        Harness harness = Harness.withCandidates(3);
+        harness.tick();
+        harness.executor.tick(
+                harness.job,
+                productionBudget(
+                        DungeonPreparationLimits
+                                .PERSISTED_PROBE_SUBMISSIONS_PER_LEVEL_TICK,
+                        1
+                )
+        );
+
+        check(harness.job.stage()
+                        == DungeonPreparationStage.SCANNING_EXISTING_SITES,
+                "in-flight limit: scanner starts");
+
+        harness.executor.tick(
+                harness.job,
+                productionBudget(
+                        DungeonPreparationLimits
+                                .PERSISTED_PROBE_SUBMISSIONS_PER_LEVEL_TICK,
+                        1
+                )
+        );
+        check(harness.backend.probeBackend(0).probeCalls() == 1,
+                "in-flight limit: first probe only");
+        check(harness.executor.activePersistedProbeCount() == 1,
+                "in-flight limit: one outstanding probe");
+
+        harness.executor.tick(
+                harness.job,
+                productionBudget(
+                        DungeonPreparationLimits
+                                .PERSISTED_PROBE_SUBMISSIONS_PER_LEVEL_TICK,
+                        1
+                )
+        );
+        check(harness.backend.probeBackend(0).probeCalls() == 1,
+                "in-flight limit: no second probe while one is outstanding");
+        check(harness.executor.activePersistedProbeCount() == 1,
+                "in-flight limit: outstanding count unchanged");
+
+        DungeonAsyncTestSupport.ControlledProbeBackend probe =
+                harness.backend.probeBackend(0);
+        probe.completeAvailable(0);
+        check(harness.executor.activePersistedProbeCount() == 0,
+                "in-flight limit: completion releases permit");
+
+        harness.executor.tick(
+                harness.job,
+                productionBudget(
+                        DungeonPreparationLimits
+                                .PERSISTED_PROBE_SUBMISSIONS_PER_LEVEL_TICK,
+                        1
+                )
+        );
+        check(probe.probeCalls() == 2,
+                "in-flight limit: later tick submits replacement");
+        check(harness.executor.activePersistedProbeCount() == 1,
+                "in-flight limit: replacement holds one permit");
     }
 
     private static void activeScannerProgressSnapshotIsNumeric() {
@@ -622,6 +737,28 @@ public final class DungeonPreparationJobExecutorTest {
         );
     }
 
+    private static DungeonPreparationTickBudget productionBudget(
+            int persistedProbeSubmissions,
+            int maxInFlightPersistedProbes
+    ) {
+        return DungeonPreparationTickBudget.boundedForTests(
+                () -> 0L,
+                DungeonPreparationLimits.MAX_PREPARATION_NANOS_PER_LEVEL_TICK,
+                DungeonPreparationLimits.START_CHUNK_REQUESTS_PER_LEVEL_TICK,
+                DungeonPreparationLimits.ENTRY_CHUNK_REQUESTS_PER_LEVEL_TICK,
+                DungeonPreparationLimits.CANDIDATE_KEYS_ENUMERATED_PER_LEVEL_TICK,
+                DungeonPreparationLimits.LOADED_FAST_PATH_PROBES_PER_LEVEL_TICK,
+                DungeonPreparationLimits.PERSISTED_SCANNER_STARTS_PER_LEVEL_TICK,
+                persistedProbeSubmissions,
+                DungeonPreparationLimits.PERSISTED_PROBE_COMPLETION_DRAINS_PER_LEVEL_TICK,
+                DungeonPreparationLimits.PERSISTED_PROBE_RESULTS_CLASSIFIED_PER_LEVEL_TICK,
+                DungeonPreparationLimits.SAFE_SPAWN_CANDIDATES_PER_LEVEL_TICK,
+                DungeonPreparationLimits.MAX_ACTIVE_PERSISTED_SCANNERS_PER_LEVEL,
+                maxInFlightPersistedProbes,
+                DungeonPreparationLimits.MAX_GENERATION_ATTEMPTS
+        );
+    }
+
     private static void invalidLoadedSiteReleasesLeaseAndRetriesNextPersistedCandidate() {
         Harness harness = Harness.withCandidates(2);
         DungeonSiteKey first = harness.backend.candidates.get(0);
@@ -1018,7 +1155,10 @@ public final class DungeonPreparationJobExecutorTest {
         }
 
         void boundedTick() {
-            this.executor.tick(this.job, DungeonPreparationTickBudget.perLevelTick());
+            this.executor.tick(
+                    this.job,
+                    DungeonPreparationTickBudget.perLevelTick(() -> 0L)
+            );
         }
 
         void tickWithSafeSpawnBudget(int candidates) {
