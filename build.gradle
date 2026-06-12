@@ -26,6 +26,9 @@ sourceSets.main.resources {
     exclude("src/generated/**/.cache") // datagen cache files
 }
 
+sourceSets.test.compileClasspath += sourceSets.main.compileClasspath
+sourceSets.test.runtimeClasspath += sourceSets.main.runtimeClasspath
+
 repositories {
     maven {
         url = uri("https://cursemaven.com")
@@ -152,6 +155,39 @@ tasks.withType(JavaCompile).configureEach {
 
 tasks.withType(Test).configureEach {
     failOnNoDiscoveredTests = false
+}
+
+def mainMethodTests = [
+        'io.github.naimjeg.obeliskdepths.tempering.TemperingTemplateDataTest',
+        'io.github.naimjeg.obeliskdepths.tempering.TemperingDirectionTest',
+        'io.github.naimjeg.obeliskdepths.worldgen.structure.layout.DungeonConnectorShapeTypeTest',
+        'io.github.naimjeg.obeliskdepths.dungeon.site.ResolvedDungeonSiteTest',
+        'io.github.naimjeg.obeliskdepths.dungeon.site.DungeonSiteProjectionSourceTest',
+        'io.github.naimjeg.obeliskdepths.dungeon.site.DungeonSiteProjectionCacheGuardTest',
+        'io.github.naimjeg.obeliskdepths.dungeon.session.DungeonKillProgressTest',
+        'io.github.naimjeg.obeliskdepths.worldgen.structure.graph.DungeonGraphGeneratorTest',
+        'io.github.naimjeg.obeliskdepths.worldgen.structure.layout.DungeonGraphEmbeddingPlannerTest',
+]
+
+def mainMethodTestTasks = mainMethodTests.collect { testClassName ->
+    def simpleName = testClassName.substring(testClassName.lastIndexOf('.') + 1)
+    tasks.register("run${simpleName}", JavaExec) {
+        group = 'verification'
+        description = "Runs ${testClassName}."
+        dependsOn tasks.named('testClasses')
+        classpath = sourceSets.test.runtimeClasspath
+        mainClass = testClassName
+    }
+}
+
+tasks.register('runMainMethodTests') {
+    group = 'verification'
+    description = 'Runs repository test classes that use public static void main assertions.'
+    dependsOn mainMethodTestTasks
+}
+
+tasks.named('test', Test).configure {
+    dependsOn tasks.named('runMainMethodTests')
 }
 
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.

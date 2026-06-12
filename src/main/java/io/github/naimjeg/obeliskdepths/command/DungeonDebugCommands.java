@@ -29,14 +29,17 @@ import io.github.naimjeg.obeliskdepths.dungeon.site.ResolvedDungeonSite;
 import io.github.naimjeg.obeliskdepths.dungeon.state.DungeonManagerSavedData;
 import io.github.naimjeg.obeliskdepths.registry.ModDimensions;
 import io.github.naimjeg.obeliskdepths.world.ObeliskDepthsTeleporter;
+import io.github.naimjeg.obeliskdepths.worldgen.structure.graph.DungeonGraph;
+import io.github.naimjeg.obeliskdepths.worldgen.structure.graph.DungeonGraphGenerator;
+import io.github.naimjeg.obeliskdepths.worldgen.structure.graph.DungeonGraphValidator;
+import io.github.naimjeg.obeliskdepths.worldgen.structure.layout.DungeonGraphEmbeddingPlanner;
 import io.github.naimjeg.obeliskdepths.worldgen.structure.layout.DungeonCellBox;
 import io.github.naimjeg.obeliskdepths.worldgen.structure.layout.DungeonLayoutConstants;
 import io.github.naimjeg.obeliskdepths.worldgen.structure.layout.DungeonLayoutGenerationProfile;
 import io.github.naimjeg.obeliskdepths.worldgen.structure.layout.DungeonLayoutNode;
 import io.github.naimjeg.obeliskdepths.worldgen.structure.layout.DungeonLayoutPlan;
-import io.github.naimjeg.obeliskdepths.worldgen.structure.layout.PreliminaryDungeonLayoutPlanner;
-import io.github.naimjeg.obeliskdepths.worldgen.structure.terrain.DungeonTerrainPlan;
-import io.github.naimjeg.obeliskdepths.worldgen.structure.terrain.DungeonTerrainPlanner;
+import io.github.naimjeg.obeliskdepths.worldgen.structure.piece.DungeonPiecePlan;
+import io.github.naimjeg.obeliskdepths.worldgen.structure.piece.DungeonPiecePlanCompiler;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
@@ -762,12 +765,17 @@ public final class DungeonDebugCommands {
             );
 
             try {
-                DungeonLayoutPlan plan =
-                        PreliminaryDungeonLayoutPlanner.plan(layoutOrigin, profile);
-                plan.validateTree();
-                DungeonTerrainPlan terrainPlan =
-                        DungeonTerrainPlanner.build(layoutOrigin, plan);
-                stats.recordSuccess(plan, terrainPlan);
+                DungeonGraph graph = DungeonGraphGenerator.generate(seed, profile);
+                DungeonGraphValidator.validate(graph);
+
+                DungeonGraph second = DungeonGraphGenerator.generate(seed, profile);
+                if (!graph.equals(second)) {
+                    stats.recordDeterministicMismatch(seed);
+                }
+
+                DungeonLayoutPlan plan = DungeonGraphEmbeddingPlanner.embed(graph, layoutOrigin);
+                DungeonPiecePlan piecePlan = DungeonPiecePlanCompiler.compile(layoutOrigin, plan);
+                stats.recordSuccess(graph, plan, piecePlan);
             } catch (RuntimeException exception) {
                 stats.recordFailure(seed, profile, exception);
             }
@@ -783,16 +791,35 @@ public final class DungeonDebugCommands {
                                 + stats.successful
                                 + " failed="
                                 + stats.failed
-                                + " avgRooms="
-                                + stats.averageRooms()
-                                + " maxRooms="
-                                + stats.maxRooms
+                                + " deterministicMismatches="
+                                + stats.deterministicMismatches
                 ),
                 false
         );
         source.sendSuccess(
                 () -> Component.literal(
-                        "  avgBoundsCells="
+                        "  graph nodes="
+                                + stats.minNodes()
+                                + ".."
+                                + stats.maxNodes
+                                + " edges="
+                                + stats.minEdges()
+                                + ".."
+                                + stats.maxEdges
+                                + " criticalPath="
+                                + stats.minCriticalPathLength()
+                                + ".."
+                                + stats.maxCriticalPathLength
+                                + " branches="
+                                + stats.minBranches()
+                                + ".."
+                                + stats.maxBranches
+                ),
+                false
+        );
+        source.sendSuccess(
+                () -> Component.literal(
+                        "  embedding avgBoundsCells="
                                 + stats.averageBoundsCells()
                                 + " maxBoundsCells="
                                 + stats.maxBoundsCells
@@ -800,26 +827,17 @@ public final class DungeonDebugCommands {
                                 + stats.averageBoundsBlocks()
                                 + " maxBoundsBlocks="
                                 + stats.maxBoundsBlocks
+                                + " avgSiteOuterBlocks="
+                                + stats.averageSiteOuterBlocks()
+                                + " maxSiteOuterBlocks="
+                                + stats.maxSiteOuterBlocks
                 ),
                 false
         );
         source.sendSuccess(
                 () -> Component.literal(
-                        "  terrain avgOuterBlocks="
-                                + stats.averageTerrainOuterBlocks()
-                                + " maxOuterBlocks="
-                                + stats.maxTerrainOuterBlocks
-                                + " avgRooms="
-                                + stats.averageTerrainRooms()
-                                + " avgCorridors="
-                                + stats.averageTerrainCorridors()
-                ),
-                false
-        );
-        source.sendSuccess(
-                () -> Component.literal(
-                        "  failures: internalOverlap="
-                                + stats.internalOverlapFailures
+                        "  failures: embeddingOverlap="
+                                + stats.embeddingOverlapFailures
                                 + ", disconnected="
                                 + stats.disconnectedFailures
                                 + ", cycleOrTree="
@@ -1027,17 +1045,22 @@ public final class DungeonDebugCommands {
 
         private int successful;
         private int failed;
-        private int totalRooms;
-        private int maxRooms;
+        private int deterministicMismatches;
+        private int minNodes = Integer.MAX_VALUE;
+        private int maxNodes;
+        private int minEdges = Integer.MAX_VALUE;
+        private int maxEdges;
+        private int minCriticalPathLength = Integer.MAX_VALUE;
+        private int maxCriticalPathLength;
+        private int minBranches = Integer.MAX_VALUE;
+        private int maxBranches;
         private int totalBoundsCells;
         private int maxBoundsCells;
         private int totalBoundsBlocks;
         private int maxBoundsBlocks;
-        private int totalTerrainOuterBlocks;
-        private int maxTerrainOuterBlocks;
-        private int totalTerrainRooms;
-        private int totalTerrainCorridors;
-        private int internalOverlapFailures;
+        private int totalSiteOuterBlocks;
+        private int maxSiteOuterBlocks;
+        private int embeddingOverlapFailures;
         private int disconnectedFailures;
         private int treeFailures;
         private int branchCapFailures;
@@ -1045,8 +1068,9 @@ public final class DungeonDebugCommands {
         private final List<String> failureSummaries = new ArrayList<>();
 
         private void recordSuccess(
+                DungeonGraph graph,
                 DungeonLayoutPlan plan,
-                DungeonTerrainPlan terrainPlan
+                DungeonPiecePlan piecePlan
         ) {
             DungeonCellBox bounds = layoutBounds(plan);
             int boundsCells = bounds.sizeX() * bounds.sizeY() * bounds.sizeZ();
@@ -1059,20 +1083,31 @@ public final class DungeonDebugCommands {
                             * DungeonLayoutConstants.CELL_SIZE_Z;
 
             this.successful++;
-            this.totalRooms += plan.nodes().size();
-            this.maxRooms = Math.max(this.maxRooms, plan.nodes().size());
+            this.minNodes = Math.min(this.minNodes, graph.nodes().size());
+            this.maxNodes = Math.max(this.maxNodes, graph.nodes().size());
+            this.minEdges = Math.min(this.minEdges, graph.edges().size());
+            this.maxEdges = Math.max(this.maxEdges, graph.edges().size());
+            this.minCriticalPathLength = Math.min(this.minCriticalPathLength, graph.criticalPathNodes().size());
+            this.maxCriticalPathLength = Math.max(this.maxCriticalPathLength, graph.criticalPathNodes().size());
+            this.minBranches = Math.min(this.minBranches, graph.branchCount());
+            this.maxBranches = Math.max(this.maxBranches, graph.branchCount());
             this.totalBoundsCells += boundsCells;
             this.maxBoundsCells = Math.max(this.maxBoundsCells, boundsCells);
             this.totalBoundsBlocks += boundsBlocks;
             this.maxBoundsBlocks = Math.max(this.maxBoundsBlocks, boundsBlocks);
 
-            int terrainOuterBlocks = terrainPlan.outerBounds().getXSpan()
-                    * terrainPlan.outerBounds().getYSpan()
-                    * terrainPlan.outerBounds().getZSpan();
-            this.totalTerrainOuterBlocks += terrainOuterBlocks;
-            this.maxTerrainOuterBlocks = Math.max(this.maxTerrainOuterBlocks, terrainOuterBlocks);
-            this.totalTerrainRooms += terrainPlan.rooms().size();
-            this.totalTerrainCorridors += terrainPlan.corridors().size();
+            int siteOuterBlocks = piecePlan.siteBounds().getXSpan()
+                    * piecePlan.siteBounds().getYSpan()
+                    * piecePlan.siteBounds().getZSpan();
+            this.totalSiteOuterBlocks += siteOuterBlocks;
+            this.maxSiteOuterBlocks = Math.max(this.maxSiteOuterBlocks, siteOuterBlocks);
+        }
+
+        private void recordDeterministicMismatch(long seed) {
+            this.deterministicMismatches++;
+            if (this.failureSummaries.size() < MAX_FAILURE_SUMMARIES) {
+                this.failureSummaries.add("seed=" + seed + " deterministic mismatch");
+            }
         }
 
         private void recordFailure(
@@ -1088,7 +1123,7 @@ public final class DungeonDebugCommands {
             this.failed++;
 
             if (lower.contains("overlap")) {
-                this.internalOverlapFailures++;
+                this.embeddingOverlapFailures++;
             } else if (lower.contains("connected")) {
                 this.disconnectedFailures++;
             } else if (lower.contains("tree") || lower.contains("cycle")) {
@@ -1111,28 +1146,32 @@ public final class DungeonDebugCommands {
             }
         }
 
-        private int averageRooms() {
-            return this.successful == 0 ? 0 : this.totalRooms / this.successful;
-        }
-
         private int averageBoundsCells() {
             return this.successful == 0 ? 0 : this.totalBoundsCells / this.successful;
+        }
+
+        private int minNodes() {
+            return this.successful == 0 ? 0 : this.minNodes;
+        }
+
+        private int minEdges() {
+            return this.successful == 0 ? 0 : this.minEdges;
+        }
+
+        private int minCriticalPathLength() {
+            return this.successful == 0 ? 0 : this.minCriticalPathLength;
+        }
+
+        private int minBranches() {
+            return this.successful == 0 ? 0 : this.minBranches;
         }
 
         private int averageBoundsBlocks() {
             return this.successful == 0 ? 0 : this.totalBoundsBlocks / this.successful;
         }
 
-        private int averageTerrainOuterBlocks() {
-            return this.successful == 0 ? 0 : this.totalTerrainOuterBlocks / this.successful;
-        }
-
-        private int averageTerrainRooms() {
-            return this.successful == 0 ? 0 : this.totalTerrainRooms / this.successful;
-        }
-
-        private int averageTerrainCorridors() {
-            return this.successful == 0 ? 0 : this.totalTerrainCorridors / this.successful;
+        private int averageSiteOuterBlocks() {
+            return this.successful == 0 ? 0 : this.totalSiteOuterBlocks / this.successful;
         }
     }
 

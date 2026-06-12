@@ -2,11 +2,14 @@ package io.github.naimjeg.obeliskdepths.worldgen.structure.placement;
 
 import io.github.naimjeg.obeliskdepths.ObeliskDepths;
 import io.github.naimjeg.obeliskdepths.dungeon.site.DungeonSitePlacement;
+import io.github.naimjeg.obeliskdepths.worldgen.structure.ObeliskDungeonStructure;
+import io.github.naimjeg.obeliskdepths.worldgen.structure.graph.DungeonGraph;
+import io.github.naimjeg.obeliskdepths.worldgen.structure.graph.DungeonGraphGenerator;
+import io.github.naimjeg.obeliskdepths.worldgen.structure.layout.DungeonGraphEmbeddingPlanner;
 import io.github.naimjeg.obeliskdepths.worldgen.structure.layout.DungeonLayoutGenerationProfile;
 import io.github.naimjeg.obeliskdepths.worldgen.structure.layout.DungeonLayoutPlan;
-import io.github.naimjeg.obeliskdepths.worldgen.structure.layout.PreliminaryDungeonLayoutPlanner;
-import io.github.naimjeg.obeliskdepths.worldgen.structure.terrain.DungeonTerrainPlan;
-import io.github.naimjeg.obeliskdepths.worldgen.structure.terrain.DungeonTerrainPlanner;
+import io.github.naimjeg.obeliskdepths.worldgen.structure.piece.DungeonPiecePlan;
+import io.github.naimjeg.obeliskdepths.worldgen.structure.piece.DungeonPiecePlanCompiler;
 import java.util.Optional;
 import java.util.Random;
 import net.minecraft.core.BlockPos;
@@ -35,7 +38,7 @@ public final class ObeliskDungeonSiteOverlapGuard {
                     continue;
                 }
 
-                BoundingBox neighborBounds = plannedBoundsForChunk(neighborChunk);
+                BoundingBox neighborBounds = plannedBoundsForChunk(worldSeed, neighborChunk);
 
                 if (!intersects(currentBounds, neighborBounds)) {
                     continue;
@@ -65,17 +68,28 @@ public final class ObeliskDungeonSiteOverlapGuard {
         return Optional.empty();
     }
 
-    public static BoundingBox plannedBoundsForChunk(ChunkPos chunkPos) {
-        BlockPos startAnchor = new BlockPos(
+    public static BoundingBox plannedBoundsForChunk(
+            long worldSeed,
+            ChunkPos chunkPos
+    ) {
+        BlockPos layoutOrigin = new BlockPos(
                 chunkPos.getMiddleBlockX(),
                 DungeonSitePlacement.PROTOTYPE_Y,
                 chunkPos.getMiddleBlockZ()
         );
-        DungeonLayoutPlan layout =
-                PreliminaryDungeonLayoutPlanner.plan(startAnchor, DungeonLayoutGenerationProfile.SMALL_TEST);
-        DungeonTerrainPlan terrainPlan = DungeonTerrainPlanner.build(startAnchor, layout);
+        long generationSeed = ObeliskDungeonStructure.deriveGenerationSeed(
+                worldSeed,
+                chunkPos,
+                layoutOrigin
+        );
+        DungeonGraph graph = DungeonGraphGenerator.generate(
+                generationSeed,
+                DungeonLayoutGenerationProfile.SMALL_TEST
+        );
+        DungeonLayoutPlan layout = DungeonGraphEmbeddingPlanner.embed(graph, layoutOrigin);
+        DungeonPiecePlan terrainPlan = DungeonPiecePlanCompiler.compile(layoutOrigin, layout);
 
-        return terrainPlan.outerBounds();
+        return terrainPlan.siteBounds();
     }
 
     public static ChunkPos candidateChunk(

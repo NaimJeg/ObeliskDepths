@@ -129,9 +129,8 @@ public final class ObeliskDungeonPiece extends StructurePiece {
 
     /*
      * Current graph/debug renderer: generated pieces expose authoritative
-     * site/room/corridor metadata and place only floor/path markers. Full
-     * terrain, walls, ceilings, shell, and NBT room templates are intentionally
-     * deferred.
+     * site/room/corridor metadata and place only floor/path markers. Authored
+     * room architecture and NBT templates are intentionally deferred.
      */
     private void placeRoom(
             WorldGenLevel level,

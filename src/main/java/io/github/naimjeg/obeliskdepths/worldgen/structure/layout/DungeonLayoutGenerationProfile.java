@@ -30,6 +30,22 @@ public enum DungeonLayoutGenerationProfile {
         return choose(seed >> 16, this.minBranches, this.maxBranches);
     }
 
+    public int minCriticalPathLength() {
+        return this.minCriticalPathLength;
+    }
+
+    public int maxCriticalPathLength() {
+        return this.maxCriticalPathLength;
+    }
+
+    public int minBranches() {
+        return this.minBranches;
+    }
+
+    public int maxBranches() {
+        return this.maxBranches;
+    }
+
     private static int choose(
             long seed,
             int min,

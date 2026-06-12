@@ -13,11 +13,15 @@ import io.github.naimjeg.obeliskdepths.dungeon.site.WorldgenDungeonSiteLocator;
 import io.github.naimjeg.obeliskdepths.dungeon.state.DungeonManagerSavedData;
 import io.github.naimjeg.obeliskdepths.registry.ModDimensions;
 import io.github.naimjeg.obeliskdepths.world.ObeliskDepthsTeleporter;
+import io.github.naimjeg.obeliskdepths.worldgen.structure.ObeliskDungeonStructure;
+import io.github.naimjeg.obeliskdepths.worldgen.structure.graph.DungeonGraph;
+import io.github.naimjeg.obeliskdepths.worldgen.structure.graph.DungeonGraphGenerator;
+import io.github.naimjeg.obeliskdepths.worldgen.structure.layout.DungeonGraphEmbeddingPlanner;
 import io.github.naimjeg.obeliskdepths.worldgen.structure.layout.DungeonLayoutConstants;
 import io.github.naimjeg.obeliskdepths.worldgen.structure.layout.DungeonLayoutEdge;
+import io.github.naimjeg.obeliskdepths.worldgen.structure.layout.DungeonLayoutGenerationProfile;
 import io.github.naimjeg.obeliskdepths.worldgen.structure.layout.DungeonLayoutNode;
 import io.github.naimjeg.obeliskdepths.worldgen.structure.layout.DungeonLayoutPlan;
-import io.github.naimjeg.obeliskdepths.worldgen.structure.layout.PreliminaryDungeonLayoutPlanner;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
@@ -326,23 +330,53 @@ public final class DungeonSiteDebugCommands {
             );
         }
 
-        sendPreliminaryPlanInfo(source, site);
+        sendDebugPlanInfo(source, dungeonLevel, site);
     }
 
-    private static void sendPreliminaryPlanInfo(
+    private static void sendDebugPlanInfo(
             CommandSourceStack source,
+            ServerLevel dungeonLevel,
             DungeonSite site
     ) {
-        BlockPos layoutOrigin = site.startPos().offset(
-                -DungeonLayoutConstants.CELL_SIZE,
-                -1,
-                -DungeonLayoutConstants.CELL_SIZE
+        ChunkPos chunkPos = site.key().toChunkPos();
+        BlockPos layoutOrigin = new BlockPos(
+                chunkPos.getMiddleBlockX(),
+                DungeonSitePlacement.PROTOTYPE_Y,
+                chunkPos.getMiddleBlockZ()
         );
-        DungeonLayoutPlan plan = PreliminaryDungeonLayoutPlanner.plan(layoutOrigin);
+        long generationSeed = ObeliskDungeonStructure.deriveGenerationSeed(
+                dungeonLevel.getSeed(),
+                chunkPos,
+                layoutOrigin
+        );
+        DungeonGraph graph = DungeonGraphGenerator.generate(
+                generationSeed,
+                DungeonLayoutGenerationProfile.SMALL_TEST
+        );
+        DungeonLayoutPlan plan = DungeonGraphEmbeddingPlanner.embed(graph, layoutOrigin);
 
         source.sendSuccess(
                 () -> Component.literal(
-                        "  preliminaryLayout cellSize="
+                        "  debugGraph profile="
+                                + DungeonLayoutGenerationProfile.SMALL_TEST
+                                + " seed="
+                                + generationSeed
+                                + " nodes="
+                                + graph.nodes().size()
+                                + " edges="
+                                + graph.edges().size()
+                                + " criticalPath="
+                                + graph.criticalPathNodes().size()
+                                + " branches="
+                                + graph.branchCount()
+                                + " (debug reconstruction; runtime reads generated pieces)"
+                ),
+                false
+        );
+
+        source.sendSuccess(
+                () -> Component.literal(
+                        "  embeddedLayout cellSize="
                                 + DungeonLayoutConstants.CELL_SIZE_X
                                 + "x"
                                 + DungeonLayoutConstants.CELL_SIZE_Y
@@ -352,7 +386,6 @@ public final class DungeonSiteDebugCommands {
                                 + plan.nodes().size()
                                 + ", edges="
                                 + plan.edges().size()
-                                + " (debug worldgen-side plan; runtime reads generated pieces)"
                 ),
                 false
         );

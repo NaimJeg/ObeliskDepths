@@ -1,82 +1,93 @@
-package io.github.naimjeg.obeliskdepths.worldgen.structure.terrain;
+package io.github.naimjeg.obeliskdepths.worldgen.structure.piece;
 
+import io.github.naimjeg.obeliskdepths.dungeon.room.DungeonRoomType;
+import io.github.naimjeg.obeliskdepths.worldgen.structure.ObeliskDungeonPieceRole;
 import io.github.naimjeg.obeliskdepths.worldgen.structure.layout.DungeonConnectorSide;
 import io.github.naimjeg.obeliskdepths.worldgen.structure.layout.DungeonLayoutConstants;
 import io.github.naimjeg.obeliskdepths.worldgen.structure.layout.DungeonLayoutEdge;
 import io.github.naimjeg.obeliskdepths.worldgen.structure.layout.DungeonLayoutNode;
 import io.github.naimjeg.obeliskdepths.worldgen.structure.layout.DungeonLayoutPlan;
+import io.github.naimjeg.obeliskdepths.worldgen.structure.layout.DungeonSpatialLayoutValidator;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
-public final class DungeonTerrainPlanner {
-    private static final int SHELL_BUFFER_BLOCKS = 2;
+public final class DungeonPiecePlanCompiler {
+    private static final int SITE_BOUNDS_BUFFER_BLOCKS = 2;
     private static final int MIN_CORRIDOR_WIDTH_BLOCKS = 3;
     private static final int CORRIDOR_HEIGHT_BLOCKS = 4;
 
-    private DungeonTerrainPlanner() {
+    private DungeonPiecePlanCompiler() {
     }
 
-    /*
-     * Worldgen-side terrain planning only. Runtime must read the generated
-     * StructureStart and serialized pieces after generation; it must not call
-     * this planner to reconstruct room topology or fabricate metadata.
-     */
-    public static DungeonTerrainPlan build(
+    public static DungeonPiecePlan compile(
             BlockPos layoutOrigin,
             DungeonLayoutPlan layout
     ) {
-        List<DungeonRoomVolume> rooms = layout.nodes().stream()
-                .map(node -> roomVolume(layoutOrigin, node))
+        DungeonSpatialLayoutValidator.validate(layout);
+
+        List<DungeonPieceMetadata> roomPieces = layout.nodes()
+                .stream()
+                .map(node -> roomPiece(layoutOrigin, node))
                 .toList();
-        List<DungeonCorridorVolume> corridors = new ArrayList<>();
+        List<DungeonPieceMetadata> corridorPieces = new ArrayList<>();
 
         for (DungeonLayoutEdge edge : layout.edges()) {
-            corridors.addAll(corridorVolumes(layout, rooms, edge));
+            corridorPieces.addAll(corridorPieces(roomPieces, edge));
         }
 
         BoundingBox union = null;
 
-        for (DungeonRoomVolume room : rooms) {
-            union = include(union, room.outerBounds());
+        for (DungeonPieceMetadata room : roomPieces) {
+            union = include(union, room.bounds());
         }
 
-        for (DungeonCorridorVolume corridor : corridors) {
+        for (DungeonPieceMetadata corridor : corridorPieces) {
             union = include(union, corridor.bounds());
         }
 
         if (union == null) {
-            throw new IllegalArgumentException("Cannot build terrain plan for empty layout");
+            throw new IllegalArgumentException("Cannot compile piece plan for empty layout");
         }
 
-        return new DungeonTerrainPlan(
-                layoutOrigin,
-                inflate(union, SHELL_BUFFER_BLOCKS),
-                rooms,
-                corridors
+        List<DungeonPieceMetadata> pieces = new ArrayList<>();
+        pieces.addAll(corridorPieces);
+        pieces.addAll(roomPieces);
+
+        BoundingBox siteBounds = inflate(union, SITE_BOUNDS_BUFFER_BLOCKS);
+        BlockPos startRoomAnchor = roomPieces.stream()
+                .filter(piece -> piece.role() == ObeliskDungeonPieceRole.START_ROOM)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Piece plan missing START room"))
+                .anchor();
+
+        DungeonSpatialLayoutValidator.validatePieceBounds(
+                layout,
+                siteBounds,
+                pieces.stream().map(DungeonPieceMetadata::bounds).toList(),
+                startRoomAnchor
         );
+
+        return new DungeonPiecePlan(layoutOrigin, siteBounds, pieces);
     }
 
-    private static DungeonRoomVolume roomVolume(
+    private static DungeonPieceMetadata roomPiece(
             BlockPos layoutOrigin,
             DungeonLayoutNode node
     ) {
-        BoundingBox outer = node.cellBox().toBlockBounds(layoutOrigin);
-        BoundingBox interior = inset(outer);
+        BoundingBox bounds = node.cellBox().toBlockBounds(layoutOrigin);
 
-        return new DungeonRoomVolume(
+        return new DungeonPieceMetadata(
+                roleFor(node.type()),
                 node.roomId(),
-                node.type(),
-                outer,
-                interior,
-                node.blockAnchor(layoutOrigin)
+                node.blockAnchor(layoutOrigin),
+                bounds
         );
     }
 
-    private static List<DungeonCorridorVolume> corridorVolumes(
-            DungeonLayoutPlan layout,
-            List<DungeonRoomVolume> rooms,
+    private static List<DungeonPieceMetadata> corridorPieces(
+            List<DungeonPieceMetadata> rooms,
             DungeonLayoutEdge edge
     ) {
         if (edge.fromSide().vertical() || edge.toSide().vertical()) {
@@ -85,68 +96,53 @@ public final class DungeonTerrainPlanner {
             );
         }
 
-        DungeonRoomVolume from = requireRoom(rooms, edge.fromRoomId());
-        DungeonRoomVolume to = requireRoom(rooms, edge.toRoomId());
-        BlockPos fromCenter = connectorCenter(from.outerBounds(), edge.fromSide());
-        BlockPos toCenter = connectorCenter(to.outerBounds(), edge.toSide());
+        DungeonPieceMetadata from = requirePiece(rooms, edge.fromRoomId());
+        DungeonPieceMetadata to = requirePiece(rooms, edge.toRoomId());
+        BlockPos fromCenter = connectorCenter(from.bounds(), edge.fromSide());
+        BlockPos toCenter = connectorCenter(to.bounds(), edge.toSide());
         int width = Math.max(
                 MIN_CORRIDOR_WIDTH_BLOCKS,
                 edge.widthCells() * DungeonLayoutConstants.CELL_SIZE_X
         );
 
         if (fromCenter.getX() == toCenter.getX() || fromCenter.getZ() == toCenter.getZ()) {
-            return List.of(new DungeonCorridorVolume(
+            BoundingBox bounds = corridorBounds(fromCenter, toCenter, width);
+            return List.of(new DungeonPieceMetadata(
+                    ObeliskDungeonPieceRole.CORRIDOR,
                     edge.id(),
-                    edge.fromRoomId(),
-                    edge.toRoomId(),
-                    corridorBounds(fromCenter, toCenter, width),
-                    width
+                    bounds.getCenter(),
+                    bounds
             ));
         }
 
         BlockPos bend = new BlockPos(toCenter.getX(), fromCenter.getY(), fromCenter.getZ());
+        BoundingBox first = corridorBounds(fromCenter, bend, width);
+        BoundingBox second = corridorBounds(bend, toCenter, width);
 
         return List.of(
-                new DungeonCorridorVolume(
+                new DungeonPieceMetadata(
+                        ObeliskDungeonPieceRole.CORRIDOR,
                         edge.id() + "_a",
-                        edge.fromRoomId(),
-                        edge.toRoomId(),
-                        corridorBounds(fromCenter, bend, width),
-                        width
+                        first.getCenter(),
+                        first
                 ),
-                new DungeonCorridorVolume(
+                new DungeonPieceMetadata(
+                        ObeliskDungeonPieceRole.CORRIDOR,
                         edge.id() + "_b",
-                        edge.fromRoomId(),
-                        edge.toRoomId(),
-                        corridorBounds(bend, toCenter, width),
-                        width
+                        second.getCenter(),
+                        second
                 )
         );
     }
 
-    private static DungeonRoomVolume requireRoom(
-            List<DungeonRoomVolume> rooms,
+    private static DungeonPieceMetadata requirePiece(
+            List<DungeonPieceMetadata> rooms,
             String roomId
     ) {
         return rooms.stream()
-                .filter(room -> room.roomId().equals(roomId))
+                .filter(room -> room.id().equals(roomId))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Unknown terrain room: " + roomId));
-    }
-
-    private static BoundingBox inset(BoundingBox outer) {
-        int minX = outer.minX() + 1;
-        int minY = outer.minY() + 1;
-        int minZ = outer.minZ() + 1;
-        int maxX = outer.maxX() - 1;
-        int maxY = outer.maxY() - 1;
-        int maxZ = outer.maxZ() - 1;
-
-        if (minX > maxX || minY > maxY || minZ > maxZ) {
-            return outer;
-        }
-
-        return new BoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
+                .orElseThrow(() -> new IllegalArgumentException("Unknown embedded room piece: " + roomId));
     }
 
     private static BlockPos connectorCenter(
@@ -235,5 +231,15 @@ public final class DungeonTerrainPlanner {
                 bounds.maxY() + amount,
                 bounds.maxZ() + amount
         );
+    }
+
+    private static ObeliskDungeonPieceRole roleFor(DungeonRoomType type) {
+        return switch (type) {
+            case START -> ObeliskDungeonPieceRole.START_ROOM;
+            case COMBAT -> ObeliskDungeonPieceRole.COMBAT_ROOM;
+            case TREASURE -> ObeliskDungeonPieceRole.TREASURE_ROOM;
+            case BOSS -> ObeliskDungeonPieceRole.BOSS_ROOM;
+            case EXIT -> ObeliskDungeonPieceRole.EXIT_ROOM;
+        };
     }
 }

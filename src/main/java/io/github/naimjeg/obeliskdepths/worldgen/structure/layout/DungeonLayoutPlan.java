@@ -27,9 +27,6 @@ public record DungeonLayoutPlan(
         validateNodeIds(nodes);
         validateEdgeIds(edges);
         validateEndpoints(nodes, edges);
-        validateNoNodeOverlap(nodes);
-        validateBranchCaps(nodes);
-        validateTree(nodes, edges);
     }
 
     public Optional<DungeonLayoutNode> node(String roomId) {
@@ -58,6 +55,12 @@ public record DungeonLayoutPlan(
     }
 
     public void validateTree() {
+        validateTree(this.nodes, this.edges);
+    }
+
+    public void validateSpatial() {
+        validateNoNodeOverlap(this.nodes);
+        validateBranchCaps(this.nodes);
         validateTree(this.nodes, this.edges);
     }
 
