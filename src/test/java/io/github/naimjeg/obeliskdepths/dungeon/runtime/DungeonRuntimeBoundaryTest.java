@@ -12,7 +12,7 @@ public final class DungeonRuntimeBoundaryTest {
     }
 
     public static void main(String[] args) throws IOException {
-        assertRuntimeReservationDoesNotPlanOrMaterialize();
+        assertRuntimeReservationDoesNotManuallyMaterialize();
         assertTeleportDoesNotMaterialize();
         assertStructureLookupDoesNotGenerateCandidates();
         assertRuntimePackagesDoNotWriteDungeonBlocks();
@@ -21,15 +21,41 @@ public final class DungeonRuntimeBoundaryTest {
         assertOverlapDiagnosticsDoNotRejectVanillaStarts();
     }
 
-    private static void assertRuntimeReservationDoesNotPlanOrMaterialize() throws IOException {
-        String source = read("io/github/naimjeg/obeliskdepths/dungeon/instance/DungeonInstanceService.java");
+    private static void assertRuntimeReservationDoesNotManuallyMaterialize() throws IOException {
+        String source = read(
+                "io/github/naimjeg/obeliskdepths/dungeon/instance/DungeonInstanceService.java"
+        );
 
-        assertNotContains(source, "DungeonSitePlanner" + ".plan(", "runtime reservation must not plan a dungeon");
-        assertNotContains(source, "DungeonMaterialization" + "Service", "runtime reservation must not materialize geometry");
-        assertNotContains(source, "reserveSitePlanForNewInstance", "runtime reservation must not reserve planned sites");
-        assertNotContains(source, "PLANNED" + "_PROTOTYPE", "runtime reservation must not use prototype projections");
-        assertContains(source, "findNearestReservableSite", "runtime reservation should discover generated sites");
-        assertContains(source, "NO RUNTIME DUNGEON GENERATION", "runtime invariant comment should be present");
+        assertNotContains(
+                source,
+                "DungeonSitePlanner" + ".plan(",
+                "runtime reservation must not plan dungeon geometry"
+        );
+        assertNotContains(
+                source,
+                "DungeonMaterialization" + "Service",
+                "runtime reservation must not manually materialize geometry"
+        );
+        assertNotContains(
+                source,
+                "reserveSitePlanForNewInstance",
+                "runtime reservation must not reserve planned sites"
+        );
+        assertNotContains(
+                source,
+                "PLANNED" + "_PROTOTYPE",
+                "runtime reservation must not use prototype projections"
+        );
+        assertContains(
+                source,
+                "findOrGenerateReservableSite",
+                "runtime reservation should use the vanilla-worldgen provisioner"
+        );
+        assertContains(
+                source,
+                "VANILLA WORLDGEN REMAINS AUTHORITATIVE",
+                "runtime worldgen invariant comment should be present"
+        );
     }
 
     private static void assertTeleportDoesNotMaterialize() throws IOException {

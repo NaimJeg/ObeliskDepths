@@ -45,9 +45,11 @@ public final class DungeonRoomState {
             DungeonRoomType type,
             DungeonRoomId roomId
     ) {
-        DungeonRoomStatus initialStatus = type == DungeonRoomType.START
-                ? DungeonRoomStatus.DISCOVERED
-                : DungeonRoomStatus.UNDISCOVERED;
+        DungeonRoomStatus initialStatus = switch (type) {
+            case START -> DungeonRoomStatus.DISCOVERED;
+            case BOSS -> DungeonRoomStatus.LOCKED;
+            default -> DungeonRoomStatus.UNDISCOVERED;
+        };
 
         return new DungeonRoomState(
                 instanceId,

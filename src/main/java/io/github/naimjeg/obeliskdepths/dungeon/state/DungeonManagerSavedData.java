@@ -824,6 +824,10 @@ public final class DungeonManagerSavedData extends SavedData {
         return this.roomStates.setStatus(instanceId, roomId, status);
     }
 
+    public boolean unlockBossRooms(DungeonInstanceId instanceId) {
+        return this.roomStates.unlockBossRooms(instanceId);
+    }
+
     public boolean markRewardClaimed(
             DungeonInstanceId instanceId,
             DungeonRoomId roomId

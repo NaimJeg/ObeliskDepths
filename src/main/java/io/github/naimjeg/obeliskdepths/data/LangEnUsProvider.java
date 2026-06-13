@@ -226,6 +226,10 @@ public final class LangEnUsProvider extends LanguageProvider {
                 "Activation failed."
         );
         add(
+                "event.obeliskdepths.dungeon_raid",
+                "Dungeon Raid — Kills %1$s/%2$s"
+        );
+        add(
                 "message.obeliskdepths.obelisk.no_dimension",
                 "ObeliskDepths dimension was not found."
         );

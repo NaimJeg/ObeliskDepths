@@ -42,6 +42,7 @@
   "entry.obeliskdepths.critical_edge.name": "Critical Edge",
   "entry.obeliskdepths.fire_edge.flavor": "A tempering mark that burns through the weapon edge.",
   "entry.obeliskdepths.fire_edge.name": "Fire Edge",
+  "event.obeliskdepths.dungeon_raid": "Dungeon Raid — Kills %1$s/%2$s",
   "gui.obeliskdepths.portal.failed": "Activation failed.",
   "gui.obeliskdepths.portal.loading": "Preparing dungeon...",
   "gui.obeliskdepths.portal.mode.party_open": "Party",

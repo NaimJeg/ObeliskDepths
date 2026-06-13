@@ -6,6 +6,7 @@ import io.github.naimjeg.obeliskdepths.dungeon.lifecycle.DungeonCleanupService;
 import io.github.naimjeg.obeliskdepths.dungeon.presence.DungeonPhysicalPresenceService;
 import io.github.naimjeg.obeliskdepths.dungeon.raid.DungeonRaidTicker;
 import io.github.naimjeg.obeliskdepths.dungeon.session.DungeonSessionManager;
+import io.github.naimjeg.obeliskdepths.dungeon.session.DungeonSessionProgressBarService;
 import io.github.naimjeg.obeliskdepths.dungeon.state.DungeonManagerSavedData;
 import io.github.naimjeg.obeliskdepths.registry.ModDimensions;
 import net.minecraft.server.level.ServerLevel;
@@ -60,6 +61,7 @@ public final class DungeonTickHandler {
         }
 
         DungeonSessionManager.tickSessions(level);
+        DungeonSessionProgressBarService.tick(level);
     }
 
     private static void tickDelayedCleanup(ServerLevel level) {

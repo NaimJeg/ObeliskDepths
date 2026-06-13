@@ -43,17 +43,46 @@ public record DungeonKillProgress(
     }
 
     public boolean isComplete() {
-        if (this.requiredKillScore <= 0) {
+        int target = this.targetKillScore();
+
+        if (target <= 0) {
             return false;
         }
 
-        /*
-         * Progress intentionally uses a threshold below 100% so players are not
-         * forced to hunt down one remaining hidden, stuck, or pathfinding-broken
-         * mob.
-         */
-        int target = (int) Math.ceil(this.requiredKillScore * this.completionThreshold);
         return this.currentKillScore >= target;
+    }
+
+    /*
+     * Progress intentionally uses a threshold below 100% so players are not
+     * forced to hunt down one remaining hidden, stuck, or pathfinding-broken mob.
+     */
+    public int targetKillScore() {
+        if (this.requiredKillScore <= 0) {
+            return 0;
+        }
+
+        return (int) Math.ceil(this.requiredKillScore * this.completionThreshold);
+    }
+
+    public int clampedCurrentKillScore() {
+        int target = this.targetKillScore();
+
+        if (target <= 0) {
+            return 0;
+        }
+
+        return Math.min(this.currentKillScore, target);
+    }
+
+    public float remainingProgress() {
+        int target = this.targetKillScore();
+
+        if (target <= 0) {
+            return 0.0F;
+        }
+
+        float remaining = (target - this.clampedCurrentKillScore()) / (float) target;
+        return Math.max(0.0F, Math.min(1.0F, remaining));
     }
 
     public DungeonKillProgress withAdditionalRequiredKillScore(int score) {

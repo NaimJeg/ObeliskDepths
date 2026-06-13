@@ -233,16 +233,20 @@ public final class DungeonSessionManager {
         data.markSessionsDirty();
 
         if (value.progress().isComplete()) {
+            boolean unlockedBossRooms = data.unlockBossRooms(instanceId);
+
             ObeliskDepths.LOGGER.debug(
-                    "Dungeon session kill threshold reached: session={}, instance={}, score={}/{}, threshold={}",
+                    "Dungeon session kill threshold reached: session={}, instance={}, score={}/{}, threshold={}, unlockedBossRooms={}",
                     value.id(),
                     value.instanceId(),
                     value.progress().currentKillScore(),
                     value.progress().requiredKillScore(),
-                    value.progress().completionThreshold()
+                    value.progress().completionThreshold(),
+                    unlockedBossRooms
             );
-            // TODO: Unlock/activate boss phase once boss-room and phase rules are finalized.
         }
+
+        DungeonSessionProgressBarService.updateSession(dungeonLevel, value);
 
         return true;
     }
@@ -379,6 +383,7 @@ public final class DungeonSessionManager {
 
         if (changed) {
             data.markSessionsDirty();
+            DungeonSessionProgressBarService.removeSession(session.get().id());
         }
 
         return changed;
@@ -498,6 +503,8 @@ public final class DungeonSessionManager {
         if (session.markCleaned()) {
             data.markSessionsDirty();
         }
+
+        DungeonSessionProgressBarService.removeSession(session.id());
 
         /*
          * TODO: When entry/exit transport becomes entity-overlap based, evict or

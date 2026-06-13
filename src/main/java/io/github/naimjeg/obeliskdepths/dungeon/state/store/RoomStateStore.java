@@ -5,6 +5,7 @@ import io.github.naimjeg.obeliskdepths.dungeon.instance.DungeonInstance;
 import io.github.naimjeg.obeliskdepths.dungeon.room.DungeonRoomId;
 import io.github.naimjeg.obeliskdepths.dungeon.room.DungeonRoomState;
 import io.github.naimjeg.obeliskdepths.dungeon.room.DungeonRoomStatus;
+import io.github.naimjeg.obeliskdepths.dungeon.room.DungeonRoomType;
 import io.github.naimjeg.obeliskdepths.dungeon.site.DungeonGeneratedRoom;
 import io.github.naimjeg.obeliskdepths.dungeon.site.DungeonSite;
 
@@ -104,6 +105,32 @@ public final class RoomStateStore {
         }
 
         boolean changed = state.get().setStatus(status);
+
+        if (changed) {
+            this.dirty.run();
+        }
+
+        return changed;
+    }
+
+    public boolean unlockBossRooms(DungeonInstanceId instanceId) {
+        Map<DungeonRoomId, DungeonRoomState> states =
+                this.roomStatesByInstance.get(instanceId);
+
+        if (states == null || states.isEmpty()) {
+            return false;
+        }
+
+        boolean changed = false;
+
+        for (DungeonRoomState state : states.values()) {
+            if (state.type() != DungeonRoomType.BOSS
+                    || state.status() != DungeonRoomStatus.LOCKED) {
+                continue;
+            }
+
+            changed |= state.setStatus(DungeonRoomStatus.UNDISCOVERED);
+        }
 
         if (changed) {
             this.dirty.run();
