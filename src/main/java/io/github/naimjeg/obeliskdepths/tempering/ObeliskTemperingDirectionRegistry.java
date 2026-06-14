@@ -21,6 +21,20 @@ public final class ObeliskTemperingDirectionRegistry {
             id("balance");
     public static final Identifier EDGE =
             id("edge");
+    public static final Identifier FLAME =
+            id("flame");
+    public static final Identifier FROST =
+            id("frost");
+    public static final Identifier STORM =
+            id("storm");
+    public static final Identifier ARCANE =
+            id("arcane");
+    public static final Identifier VENOM =
+            id("venom");
+    public static final Identifier PRECISION =
+            id("precision");
+    public static final Identifier HUNT =
+            id("hunt");
     public static final Identifier GUARD =
             id("guard");
     public static final Identifier ECHO =
@@ -49,8 +63,15 @@ public final class ObeliskTemperingDirectionRegistry {
 
         registerBuiltIn(definitions, BALANCE, 0);
         registerBuiltIn(definitions, EDGE, 100);
-        registerBuiltIn(definitions, GUARD, 200);
-        registerBuiltIn(definitions, ECHO, 300);
+        registerBuiltIn(definitions, FLAME, 200);
+        registerBuiltIn(definitions, FROST, 300);
+        registerBuiltIn(definitions, STORM, 400);
+        registerBuiltIn(definitions, ARCANE, 500);
+        registerBuiltIn(definitions, VENOM, 600);
+        registerBuiltIn(definitions, PRECISION, 700);
+        registerBuiltIn(definitions, HUNT, 800);
+        registerBuiltIn(definitions, GUARD, 900);
+        registerBuiltIn(definitions, ECHO, 1000);
 
         if (datapack != null) {
             definitions.putAll(datapack);

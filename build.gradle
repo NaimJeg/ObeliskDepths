@@ -161,6 +161,7 @@ def mainMethodTests = [
         'io.github.naimjeg.obeliskdepths.tempering.TemperingTemplateDataTest',
         'io.github.naimjeg.obeliskdepths.tempering.ObeliskTemperingDirectionRegistryTest',
         'io.github.naimjeg.obeliskdepths.tempering.ObeliskTemperingDirectionPoolResolverTest',
+        'io.github.naimjeg.obeliskdepths.tempering.BuiltinTemperingCatalogTest',
         'io.github.naimjeg.obeliskdepths.worldgen.structure.layout.DungeonConnectorShapeTypeTest',
         'io.github.naimjeg.obeliskdepths.dungeon.site.ResolvedDungeonSiteTest',
         'io.github.naimjeg.obeliskdepths.dungeon.site.DungeonSiteProjectionSourceTest',

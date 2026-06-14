@@ -134,7 +134,7 @@ public final class LangEnUsProvider extends LanguageProvider {
         );
         add(
                 "tempering_direction.obeliskdepths.balance.description",
-                "Balanced tempering draws from all matching balanced pools."
+                "Steady weapon tempering with reliable general damage."
         );
         add(
                 "tempering_direction.obeliskdepths.edge",
@@ -142,7 +142,63 @@ public final class LangEnUsProvider extends LanguageProvider {
         );
         add(
                 "tempering_direction.obeliskdepths.edge.description",
-                "Edge tempering favors direct offensive affixes."
+                "Physical offense, armor pressure, and finishing power."
+        );
+        add(
+                "tempering_direction.obeliskdepths.flame",
+                "Flame"
+        );
+        add(
+                "tempering_direction.obeliskdepths.flame.description",
+                "Fire damage and burning-target pressure."
+        );
+        add(
+                "tempering_direction.obeliskdepths.frost",
+                "Frost"
+        );
+        add(
+                "tempering_direction.obeliskdepths.frost.description",
+                "Cold damage and physical-to-cold conversion."
+        );
+        add(
+                "tempering_direction.obeliskdepths.storm",
+                "Storm"
+        );
+        add(
+                "tempering_direction.obeliskdepths.storm.description",
+                "Lightning and kinetic damage for forceful strikes."
+        );
+        add(
+                "tempering_direction.obeliskdepths.arcane",
+                "Arcane"
+        );
+        add(
+                "tempering_direction.obeliskdepths.arcane.description",
+                "Magic damage and spellblade-style damage gains."
+        );
+        add(
+                "tempering_direction.obeliskdepths.venom",
+                "Venom"
+        );
+        add(
+                "tempering_direction.obeliskdepths.venom.description",
+                "Poison, wither, and toxic weapon conversion."
+        );
+        add(
+                "tempering_direction.obeliskdepths.precision",
+                "Precision"
+        );
+        add(
+                "tempering_direction.obeliskdepths.precision.description",
+                "Critical hits and opening-strike pressure."
+        );
+        add(
+                "tempering_direction.obeliskdepths.hunt",
+                "Hunt"
+        );
+        add(
+                "tempering_direction.obeliskdepths.hunt.description",
+                "Boss hunting and weakened-target execution."
         );
         add(
                 "tempering_direction.obeliskdepths.guard",
@@ -168,20 +224,152 @@ public final class LangEnUsProvider extends LanguageProvider {
                 "tooltip.obeliskdepths.tempering_template.weight",
                 "Tempering Weight: %s"
         );
-        add(
-                "entry.obeliskdepths.fire_edge.name",
-                "Fire Edge"
+        addTemperingEntry(
+                "tempered",
+                "Tempered",
+                "+3 physical damage",
+                "A steady strike mark with no fragile condition."
         );
-        add(
-                "entry.obeliskdepths.fire_edge.flavor",
+        addTemperingEntry(
+                "brutal",
+                "Brutal",
+                "+10% global damage",
+                "A blunt force mark that pushes every hit harder."
+        );
+        addTemperingEntry(
+                "razor_edged",
+                "Razor Edged",
+                "+12% physical damage",
+                "A clean edge mark for weapons that solve problems directly."
+        );
+        addTemperingEntry(
+                "piercing",
+                "Piercing",
+                "+1.5 physical true damage",
+                "A narrow point of force that slips past mitigation."
+        );
+        addTemperingEntry(
+                "sundering",
+                "Sundering",
+                "-12% target armor effectiveness",
+                "A breaker mark that makes armor answer less loudly."
+        );
+        addTemperingEntry(
+                "executioners",
+                "Executioner's",
+                "+20% physical damage below 35% target health",
+                "A finishing mark that leans into a weakened enemy."
+        );
+        addTemperingEntry(
+                "flaming",
+                "Flaming",
+                "+3 fire damage",
+                "A direct ember mark that adds reliable fire damage."
+        );
+        addTemperingEntry(
+                "flameforged",
+                "Flameforged",
+                "Converts 20% physical damage to fire",
+                "A furnace-born mark that changes part of the blade's bite."
+        );
+        addTemperingEntry(
+                "smoldering",
+                "Smoldering",
+                "+15% global damage against burning targets",
+                "A patient heat mark that rewards keeping enemies burning."
+        );
+        addTemperingEntry(
+                "frostbound",
+                "Frostbound",
+                "+3 cold damage",
+                "A cold mark that lays winter into the weapon's edge."
+        );
+        addTemperingEntry(
+                "frostforged",
+                "Frostforged",
+                "Converts 20% physical damage to cold",
+                "A pale forge mark that turns impact into chill."
+        );
+        addTemperingEntry(
+                "stormcharged",
+                "Stormcharged",
+                "+3 lightning damage",
+                "A charged mark that snaps through the strike."
+        );
+        addTemperingEntry(
+                "stormforged",
+                "Stormforged",
+                "Converts 18% physical damage to lightning",
+                "A storm mark that turns force into a hard flash."
+        );
+        addTemperingEntry(
+                "impacting",
+                "Impacting",
+                "+2.5 kinetic damage",
+                "A concussive mark that adds blunt momentum."
+        );
+        addTemperingEntry(
+                "arcane",
+                "Arcane",
+                "+3 magic damage",
+                "A focused sigil that threads magic through the hit."
+        );
+        addTemperingEntry(
+                "spellblade",
+                "Spellblade",
+                "Gain 15% physical damage as magic",
+                "A blade-and-sigil mark that echoes force as magic."
+        );
+        addTemperingEntry(
+                "venomous",
+                "Venomous",
+                "+3 poison damage",
+                "A toxin mark that leaves a bitter cut."
+        );
+        addTemperingEntry(
+                "toxic_edge",
+                "Toxic Edge",
+                "Gain 15% physical damage as poison",
+                "A coated-edge mark that makes clean cuts turn toxic."
+        );
+        addTemperingEntry(
+                "withering",
+                "Withering",
+                "+2 wither damage",
+                "A fading mark that carries a dry, ruinous bite."
+        );
+        addTemperingEntry(
+                "deadly",
+                "Deadly",
+                "+20% physical damage on critical hits",
+                "A precise mark that rewards decisive timing."
+        );
+        addTemperingEntry(
+                "ambushers",
+                "Ambusher's",
+                "+18% global damage above 80% target health",
+                "An opening-strike mark made for the first clean hit."
+        );
+        addTemperingEntry(
+                "giant_slayers",
+                "Giant Slayer's",
+                "+20% global damage against bosses",
+                "A hunter's mark built for targets that should not stand."
+        );
+        addTemperingEntry(
+                "fire_edge",
+                "Fire Edge",
+                "+4 fire damage",
                 "A tempering mark that burns through the weapon edge."
         );
         add(
-                "entry.obeliskdepths.critical_edge.name",
-                "Critical Edge"
+                "entry.obeliskdepths.fire_edge.tooltip.1",
+                "+15% fire damage"
         );
-        add(
-                "entry.obeliskdepths.critical_edge.flavor",
+        addTemperingEntry(
+                "critical_edge",
+                "Critical Edge",
+                "+20% physical damage on critical hits",
                 "A tempering mark that rewards clean decisive strikes."
         );
 
@@ -281,6 +469,18 @@ public final class LangEnUsProvider extends LanguageProvider {
         }
 
         addItem(item, nameFromId(id));
+    }
+
+    private void addTemperingEntry(
+            String key,
+            String name,
+            String tooltip,
+            String flavor
+    ) {
+        String prefix = "entry." + ObeliskDepths.MOD_ID + "." + key;
+        add(prefix + ".name", name);
+        add(prefix + ".tooltip.0", tooltip);
+        add(prefix + ".flavor", flavor);
     }
 
     private static String nameFromId(Identifier id) {

@@ -48,20 +48,6 @@ public final class ModRecipeProvider extends RecipeProvider {
         this.addTemperingProgressionRecipes();
     }
 
-    /**
-     * Generates a small valid recipe set that exercises the reverse
-     * direction-to-pool aggregation model.
-     *
-     * With a tier-1 template, sword and echo shard:
-     *
-     * balance -> shared_combat
-     * edge    -> edge_primary + shared_combat
-     * guard   -> guard_primary + shared_combat
-     *
-     * Every recipe currently contributes the built-in "basic" physical pool.
-     * This deliberately tests that the same physical pool can be contributed
-     * by multiple independently matching recipes.
-     */
     private void addObeliskTemperingRecipes() {
         Ingredient weapon = Ingredient.of(
                 this.registries
@@ -75,6 +61,31 @@ public final class ModRecipeProvider extends RecipeProvider {
                 ModItems.TEMPERING_SMITHING_TEMPLATE.get()
         );
 
+        this.saveTemperingRecipe(
+                "tempering/balance_tier_1",
+                weapon,
+                template,
+                Optional.of(
+                        Ingredient.of(Items.ECHO_SHARD)
+                ),
+                BuiltinTemperingPools.BALANCE_TIER_1,
+                1,
+                1,
+                1,
+                1,
+                1.0F,
+                false,
+                List.of(
+                        ObeliskTemperingDirectionRegistry.BALANCE
+                )
+        );
+
+        /*
+         * Keep the original generated recipe id to avoid breaking datapacks that
+         * referenced the first tier-1 edge contribution. Do not also emit
+         * tempering/edge_tier_1, because both recipes would base-match and double
+         * all edge pool weights.
+         */
         this.saveTemperingRecipe(
                 "tempering/sword_edge_tier_1",
                 weapon,
@@ -91,6 +102,139 @@ public final class ModRecipeProvider extends RecipeProvider {
                 false,
                 List.of(
                         ObeliskTemperingDirectionRegistry.EDGE
+                )
+        );
+
+        this.saveTemperingRecipe(
+                "tempering/flame_tier_1",
+                weapon,
+                template,
+                Optional.of(
+                        Ingredient.of(Items.ECHO_SHARD)
+                ),
+                BuiltinTemperingPools.FLAME_TIER_1,
+                1,
+                1,
+                1,
+                1,
+                1.0F,
+                false,
+                List.of(
+                        ObeliskTemperingDirectionRegistry.FLAME
+                )
+        );
+
+        this.saveTemperingRecipe(
+                "tempering/frost_tier_1",
+                weapon,
+                template,
+                Optional.of(
+                        Ingredient.of(Items.ECHO_SHARD)
+                ),
+                BuiltinTemperingPools.FROST_TIER_1,
+                1,
+                1,
+                1,
+                1,
+                1.0F,
+                false,
+                List.of(
+                        ObeliskTemperingDirectionRegistry.FROST
+                )
+        );
+
+        this.saveTemperingRecipe(
+                "tempering/storm_tier_1",
+                weapon,
+                template,
+                Optional.of(
+                        Ingredient.of(Items.ECHO_SHARD)
+                ),
+                BuiltinTemperingPools.STORM_TIER_1,
+                1,
+                1,
+                1,
+                1,
+                1.0F,
+                false,
+                List.of(
+                        ObeliskTemperingDirectionRegistry.STORM
+                )
+        );
+
+        this.saveTemperingRecipe(
+                "tempering/arcane_tier_1",
+                weapon,
+                template,
+                Optional.of(
+                        Ingredient.of(Items.ECHO_SHARD)
+                ),
+                BuiltinTemperingPools.ARCANE_TIER_1,
+                1,
+                1,
+                1,
+                1,
+                1.0F,
+                false,
+                List.of(
+                        ObeliskTemperingDirectionRegistry.ARCANE
+                )
+        );
+
+        this.saveTemperingRecipe(
+                "tempering/venom_tier_1",
+                weapon,
+                template,
+                Optional.of(
+                        Ingredient.of(Items.ECHO_SHARD)
+                ),
+                BuiltinTemperingPools.VENOM_TIER_1,
+                1,
+                1,
+                1,
+                1,
+                1.0F,
+                false,
+                List.of(
+                        ObeliskTemperingDirectionRegistry.VENOM
+                )
+        );
+
+        this.saveTemperingRecipe(
+                "tempering/precision_tier_1",
+                weapon,
+                template,
+                Optional.of(
+                        Ingredient.of(Items.ECHO_SHARD)
+                ),
+                BuiltinTemperingPools.PRECISION_TIER_1,
+                1,
+                1,
+                1,
+                1,
+                1.0F,
+                false,
+                List.of(
+                        ObeliskTemperingDirectionRegistry.PRECISION
+                )
+        );
+
+        this.saveTemperingRecipe(
+                "tempering/hunt_tier_1",
+                weapon,
+                template,
+                Optional.of(
+                        Ingredient.of(Items.ECHO_SHARD)
+                ),
+                BuiltinTemperingPools.HUNT_TIER_1,
+                1,
+                1,
+                1,
+                1,
+                1.0F,
+                false,
+                List.of(
+                        ObeliskTemperingDirectionRegistry.HUNT
                 )
         );
     }

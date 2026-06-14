@@ -55,8 +55,8 @@ public class ObeliskTemperingMenu extends AbstractContainerMenu {
     public static final int TEMPLATE_SLOT_Y = 25;
     public static final int INGREDIENT_SLOT_X = 30;
     public static final int INGREDIENT_SLOT_Y = 45;
-    public static final int RESULT_SLOT_X = 152;
-    public static final int RESULT_SLOT_Y = 64;
+    public static final int RESULT_SLOT_X = 148;
+    public static final int RESULT_SLOT_Y = 30;
 
     public static final int AFFIX_BUTTON_OFFSET = 1000;
 

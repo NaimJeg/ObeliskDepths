@@ -28,14 +28,22 @@ public class ObeliskTemperingScreen
                     "textures/gui/container/obelisk_tempering.png"
             );
 
-    private static final int DIRECTION_LIST_X = 90;
+    private static final int DIRECTION_LIST_X = 66;
     private static final int DIRECTION_LIST_Y = 16;
-    private static final int DIRECTION_LIST_WIDTH = 66;
+    private static final int DIRECTION_LIST_WIDTH = 74;
     private static final int DIRECTION_LIST_HEIGHT = 44;
-    private static final int AFFIX_LIST_X = 182;
+    private static final int AFFIX_LIST_X = 184;
     private static final int AFFIX_LIST_Y = 7;
-    private static final int AFFIX_LIST_WIDTH = 54;
+    private static final int AFFIX_LIST_WIDTH = 68;
     private static final int AFFIX_LIST_HEIGHT = 151;
+
+    private static final int CONTENT_X_OFFSET = 2;
+    private static final int CONTENT_Y_OFFSET = 2;
+
+    private static final int ENTRY_BOX_X_OFFSET = -5;
+    private static final int ENTRY_BOX_Y_OFFSET = -2;
+    private static final int ENTRY_BOX_RIGHT_INSET = 1;
+    private static final int ENTRY_BOX_BOTTOM_INSET = 0;
 
     private static final int COLOR_TEXT_PRIMARY = 0xFFFFFFFF;
     private static final int COLOR_TEXT_SECONDARY = 0xFFB0B0B0;
@@ -187,34 +195,34 @@ public class ObeliskTemperingScreen
             int mouseX,
             int mouseY
     ) {
-        graphics.text(
-                this.font,
-                Component.translatable(
-                        "gui.obeliskdepths.tempering.directions"
-                ),
-                DIRECTION_LIST_X,
-                6,
-                0xFF404040,
-                false
-        );
+//        graphics.text(
+//                this.font,
+//                Component.translatable(
+//                        "gui.obeliskdepths.tempering.directions"
+//                ),
+//                DIRECTION_LIST_X,
+//                6,
+//                0xFF404040,
+//                false
+//        );
 
-        graphics.text(
-                this.font,
-                Component.translatable(
-                        "gui.obeliskdepths.tempering.possible_affixes"
-                ),
-                AFFIX_LIST_X,
-                6,
-                0xFF404040,
-                false
-        );
+//        graphics.text(
+//                this.font,
+//                Component.translatable(
+//                        "gui.obeliskdepths.tempering.possible_affixes"
+//                ),
+//                AFFIX_LIST_X,
+//                6,
+//                0xFF404040,
+//                false
+//        );
 
         if (this.menu.hasRecipeError()) {
             graphics.text(
                     this.font,
                     Component.literal("!"),
-                    ObeliskTemperingMenu.RESULT_SLOT_X + 21,
-                    ObeliskTemperingMenu.RESULT_SLOT_Y + 4,
+                    ObeliskTemperingMenu.INGREDIENT_SLOT_X + 8,
+                    ObeliskTemperingMenu.INGREDIENT_SLOT_Y + 4,
                     COLOR_ERROR,
                     false
             );
@@ -223,6 +231,10 @@ public class ObeliskTemperingScreen
 
     private final class DirectionSelectionList
             extends ObjectSelectionList<DirectionSelectionList.Entry> {
+
+        private static final int SCROLLBAR_RESERVED_WIDTH = 12;
+        private static final int SCROLLBAR_RIGHT_MARGIN = 1;
+
         private DirectionSelectionList(
                 Minecraft minecraft,
                 int x,
@@ -232,35 +244,120 @@ public class ObeliskTemperingScreen
         ) {
             super(minecraft, width, height, y, 12);
             this.updateSizeAndPosition(width, height, x, y);
+            this.centerListVertically = false;
+        }
+
+        @Override
+        protected void extractSelection(
+                GuiGraphicsExtractor graphics,
+                Entry entry,
+                int outlineColor
+        ) {
+            int boxX = entry.getX() + ENTRY_BOX_X_OFFSET;
+            int boxY = entry.getY() + ENTRY_BOX_Y_OFFSET;
+
+            int boxRight = entry.getX()
+                    + entry.getWidth()
+                    - ENTRY_BOX_RIGHT_INSET;
+
+            int boxBottom = entry.getY()
+                    + entry.getHeight()
+                    - ENTRY_BOX_BOTTOM_INSET;
+
+            graphics.fill(
+                    boxX,
+                    boxY,
+                    boxRight,
+                    boxBottom,
+                    outlineColor
+            );
+
+            graphics.fill(
+                    boxX + 1,
+                    boxY + 1,
+                    boxRight - 1,
+                    boxBottom - 1,
+                    0xFF000000
+            );
         }
 
         @Override
         public int getRowWidth() {
-            return Math.max(16, this.getWidth() - 16);
+            return Math.max(
+                    16,
+                    this.getWidth() - SCROLLBAR_RESERVED_WIDTH
+            );
+        }
+
+        @Override
+        protected int scrollBarX() {
+            return this.getX()
+                    + this.getWidth()
+                    - SCROLLBAR_RIGHT_MARGIN
+                    - SCROLLBAR_WIDTH;
+        }
+
+        private boolean handleMouseWheel(
+                double mouseX,
+                double mouseY,
+                double scrollY
+        ) {
+            if (!this.isMouseOver(mouseX, mouseY)) {
+                return false;
+            }
+
+            if (this.maxScrollAmount() <= 0) {
+                return false;
+            }
+
+            this.setScrollAmount(
+                    this.scrollAmount()
+                            - scrollY * this.defaultEntryHeight
+            );
+
+            return true;
         }
 
         private void setDirections(
                 List<TemperingDirectionView> directions,
                 Identifier selectedDirection
         ) {
-            this.replaceEntries(directions
-                    .stream()
-                    .map(Entry::new)
-                    .toList());
+            double previousScroll = this.scrollAmount();
+
+            this.replaceEntries(
+                    directions.stream()
+                            .map(Entry::new)
+                            .toList()
+            );
+
+            this.setScrollAmount(previousScroll);
             this.setSelectedDirection(selectedDirection);
         }
 
         private void setSelectedDirection(Identifier direction) {
+            this.setSelected(null);
+
+            if (direction == null) {
+                return;
+            }
+
             for (Entry entry : this.children()) {
-                if (entry.view.id().equals(direction)) {
-                    this.setSelected(entry);
-                    return;
+                if (!entry.view.id().equals(direction)) {
+                    continue;
                 }
+
+                this.setSelected(entry);
+
+                this.scrollToEntry(entry);
+                return;
             }
         }
 
         private final class Entry
-                extends ObjectSelectionList.Entry<DirectionSelectionList.Entry> {
+                extends ObjectSelectionList.Entry<
+                DirectionSelectionList.Entry
+                > {
+
             private final TemperingDirectionView view;
 
             private Entry(TemperingDirectionView view) {
@@ -275,22 +372,40 @@ public class ObeliskTemperingScreen
                     boolean hovered,
                     float partialTick
             ) {
-                if (hovered) {
+                int boxX = this.getX() + ENTRY_BOX_X_OFFSET;
+                int boxY = this.getY() + ENTRY_BOX_Y_OFFSET;
+
+                int boxRight = this.getX()
+                        + this.getWidth()
+                        - ENTRY_BOX_RIGHT_INSET;
+
+                int boxBottom = this.getY()
+                        + this.getHeight()
+                        - ENTRY_BOX_BOTTOM_INSET;
+
+                if (hovered
+                        && DirectionSelectionList.this.getSelected() != this) {
                     graphics.fill(
-                            this.getX() + 1,
-                            this.getY() + 1,
-                            this.getX() + this.getWidth() - 1,
-                            this.getY() + this.getHeight() - 1,
-                            0x553C6A74
+                            boxX,
+                            boxY,
+                            boxRight,
+                            boxBottom,
+                            COLOR_HOVER
                     );
                 }
+
+                int textX = boxX + CONTENT_X_OFFSET;
+
+                int textY = boxY
+                        + (boxBottom - boxY
+                        - ObeliskTemperingScreen.this.font.lineHeight) / 2
+                        + CONTENT_Y_OFFSET;
 
                 graphics.text(
                         ObeliskTemperingScreen.this.font,
                         this.view.displayName(),
-                        this.getContentX(),
-                        this.getContentYMiddle()
-                                - ObeliskTemperingScreen.this.font.lineHeight / 2,
+                        textX,
+                        textY,
                         COLOR_TEXT_PRIMARY,
                         false
                 );
@@ -301,12 +416,16 @@ public class ObeliskTemperingScreen
                     MouseButtonEvent event,
                     boolean doubleClick
             ) {
-                if (event.button() == 0) {
-                    ObeliskTemperingScreen.this.selectDirection(this.view.id());
-                    return true;
+                if (event.button() != 0) {
+                    return false;
                 }
 
-                return false;
+                DirectionSelectionList.this.setSelected(this);
+
+                ObeliskTemperingScreen.this.selectDirection(
+                        this.view.id()
+                );
+                return true;
             }
 
             @Override
@@ -321,6 +440,10 @@ public class ObeliskTemperingScreen
 
     private final class AffixPreviewList
             extends ObjectSelectionList<AffixPreviewList.Entry> {
+
+        private static final int SCROLLBAR_RESERVED_WIDTH = 12;
+        private static final int SCROLLBAR_RIGHT_MARGIN = 1;
+
         private AffixPreviewList(
                 Minecraft minecraft,
                 int x,
@@ -328,13 +451,46 @@ public class ObeliskTemperingScreen
                 int width,
                 int height
         ) {
-            super(minecraft, width, height, y, 24);
+            super(minecraft, width, height, y, 26);
             this.updateSizeAndPosition(width, height, x, y);
+            this.centerListVertically = false;
         }
 
         @Override
         public int getRowWidth() {
-            return Math.max(16, this.getWidth() - 16);
+            return Math.max(
+                    16,
+                    this.getWidth() - SCROLLBAR_RESERVED_WIDTH
+            );
+        }
+
+        @Override
+        protected int scrollBarX() {
+            return this.getX()
+                    + this.getWidth()
+                    - SCROLLBAR_RIGHT_MARGIN
+                    - SCROLLBAR_WIDTH;
+        }
+
+        private boolean handleMouseWheel(
+                double mouseX,
+                double mouseY,
+                double scrollY
+        ) {
+            if (!this.isMouseOver(mouseX, mouseY)) {
+                return false;
+            }
+
+            if (this.maxScrollAmount() <= 0) {
+                return false;
+            }
+
+            this.setScrollAmount(
+                    this.scrollAmount()
+                            - scrollY * this.defaultEntryHeight
+            );
+
+            return true;
         }
 
         private void setPreviews(
@@ -342,29 +498,32 @@ public class ObeliskTemperingScreen
                 boolean validRecipe,
                 boolean previewAvailable
         ) {
+            double previousScroll = this.scrollAmount();
+            List<Entry> entries;
+
             if (!validRecipe) {
-                this.replaceEntries(List.of());
-                return;
+                entries = List.of();
+            } else if (!previewAvailable) {
+                entries = List.of(this.messageEntry(
+                        Component.translatable(
+                                "gui.obeliskdepths.tempering.preview_unavailable"
+                        )
+                ));
+            } else if (previews.isEmpty()) {
+                entries = List.of(this.messageEntry(
+                        Component.translatable(
+                                "gui.obeliskdepths.tempering.no_possible_affixes"
+                        )
+                ));
+            } else {
+                entries = previews.stream()
+                        .map(this::previewEntry)
+                        .toList();
             }
 
-            if (!previewAvailable) {
-                this.replaceEntries(List.of(this.messageEntry(Component.translatable(
-                        "gui.obeliskdepths.tempering.preview_unavailable"
-                ))));
-                return;
-            }
+            this.replaceEntries(entries);
 
-            if (previews.isEmpty()) {
-                this.replaceEntries(List.of(this.messageEntry(Component.translatable(
-                        "gui.obeliskdepths.tempering.no_possible_affixes"
-                ))));
-                return;
-            }
-
-            this.replaceEntries(previews
-                    .stream()
-                    .map(this::previewEntry)
-                    .toList());
+            this.setScrollAmount(previousScroll);
         }
 
         private Entry messageEntry(Component message) {
@@ -386,7 +545,10 @@ public class ObeliskTemperingScreen
         }
 
         private final class Entry
-                extends ObjectSelectionList.Entry<AffixPreviewList.Entry> {
+                extends ObjectSelectionList.Entry<
+                AffixPreviewList.Entry
+                > {
+
             private final Component name;
             private final Component description;
             private final int weight;
@@ -412,41 +574,58 @@ public class ObeliskTemperingScreen
                     boolean hovered,
                     float partialTick
             ) {
+                int boxX = this.getX() + ENTRY_BOX_X_OFFSET;
+                int boxY = this.getY() + ENTRY_BOX_Y_OFFSET;
+
+                int boxRight = this.getX()
+                        + this.getWidth()
+                        - ENTRY_BOX_RIGHT_INSET;
+
+                int boxBottom = this.getY()
+                        + this.getHeight()
+                        - ENTRY_BOX_BOTTOM_INSET;
+
                 if (hovered && !this.message) {
                     graphics.fill(
-                            this.getX() + 1,
-                            this.getY() + 1,
-                            this.getX() + this.getWidth() - 1,
-                            this.getY() + this.getHeight() - 1,
-                            0x553C6A74
+                            boxX,
+                            boxY,
+                            boxRight,
+                            boxBottom,
+                            COLOR_HOVER
                     );
                 }
+
+                int contentX = boxX + CONTENT_X_OFFSET;
+                int contentY = boxY + CONTENT_Y_OFFSET;
 
                 graphics.text(
                         ObeliskTemperingScreen.this.font,
                         this.name,
-                        this.getContentX(),
-                        this.getContentY(),
+                        contentX,
+                        contentY,
                         this.message
                                 ? COLOR_TEXT_SECONDARY
                                 : COLOR_TEXT_PRIMARY,
                         false
                 );
 
-                if (!this.message) {
-                    Component detail = this.description.getString().isBlank()
-                            ? Component.literal("Weight: " + this.weight)
-                            : this.description;
-
-                    graphics.text(
-                            ObeliskTemperingScreen.this.font,
-                            detail,
-                            this.getContentX(),
-                            this.getContentY() + 10,
-                            COLOR_TEXT_SECONDARY,
-                            false
-                    );
+                if (this.message) {
+                    return;
                 }
+
+                Component detail =
+                        this.description.getString().isBlank()
+                                ? Component.literal("Weight: " + this.weight)
+                                : this.description;
+
+                graphics.text(
+                        ObeliskTemperingScreen.this.font,
+                        detail,
+                        contentX,
+                        contentY + 10,
+                        COLOR_TEXT_SECONDARY,
+                        false
+                );
             }
 
             @Override
@@ -462,5 +641,38 @@ public class ObeliskTemperingScreen
                 return this.name;
             }
         }
+    }
+
+    @Override
+    public boolean mouseScrolled(
+            double mouseX,
+            double mouseY,
+            double scrollX,
+            double scrollY
+    ) {
+        if (this.directionList != null
+                && this.directionList.handleMouseWheel(
+                mouseX,
+                mouseY,
+                scrollY
+        )) {
+            return true;
+        }
+
+        if (this.affixList != null
+                && this.affixList.handleMouseWheel(
+                mouseX,
+                mouseY,
+                scrollY
+        )) {
+            return true;
+        }
+
+        return super.mouseScrolled(
+                mouseX,
+                mouseY,
+                scrollX,
+                scrollY
+        );
     }
 }

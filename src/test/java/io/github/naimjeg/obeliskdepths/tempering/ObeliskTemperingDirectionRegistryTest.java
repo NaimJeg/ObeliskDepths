@@ -33,6 +33,23 @@ public final class ObeliskTemperingDirectionRegistryTest {
                 "directions should sort by order then identifier"
         );
         ObeliskTemperingDirectionRegistry.bootstrapBuiltIns();
+        assertEquals(
+                List.of(
+                        ObeliskTemperingDirectionRegistry.BALANCE,
+                        ObeliskTemperingDirectionRegistry.EDGE,
+                        ObeliskTemperingDirectionRegistry.FLAME,
+                        ObeliskTemperingDirectionRegistry.FROST,
+                        ObeliskTemperingDirectionRegistry.STORM,
+                        ObeliskTemperingDirectionRegistry.ARCANE,
+                        ObeliskTemperingDirectionRegistry.VENOM,
+                        ObeliskTemperingDirectionRegistry.PRECISION,
+                        ObeliskTemperingDirectionRegistry.HUNT,
+                        ObeliskTemperingDirectionRegistry.GUARD,
+                        ObeliskTemperingDirectionRegistry.ECHO
+                ),
+                ObeliskTemperingDirectionRegistry.orderedDirectionIds(),
+                "built-in directions should use the production order"
+        );
     }
 
     private static ObeliskTemperingDirectionDefinition definition(
