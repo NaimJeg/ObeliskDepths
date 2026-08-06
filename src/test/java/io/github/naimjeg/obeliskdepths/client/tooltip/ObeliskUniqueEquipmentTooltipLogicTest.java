@@ -22,7 +22,7 @@ public final class ObeliskUniqueEquipmentTooltipLogicTest {
 
     public static void main(String[] args) {
         uniqueCatalogEntriesResolveThroughRegistryOrCatalogFallback();
-        presentationCopyKeepsAllAuthoringExceptName();
+        presentationCopyKeepsAuthoredSummaryAndAllOtherAuthoringExceptName();
         presentationCopyDoesNotMutateCatalogDefinitions();
         materializedSameIdSuppressesSupplement();
         unknownIdentityDoesNotSupplement();
@@ -53,7 +53,7 @@ public final class ObeliskUniqueEquipmentTooltipLogicTest {
     }
 
     @Test
-    static void presentationCopyKeepsAllAuthoringExceptName() {
+    static void presentationCopyKeepsAuthoredSummaryAndAllOtherAuthoringExceptName() {
         for (ObeliskUniqueEquipmentDefinition unique
                 : ObeliskUniqueEquipmentCatalog.all()) {
             DamageEntryDefinition source = unique.content().definition();
@@ -66,8 +66,8 @@ public final class ObeliskUniqueEquipmentTooltipLogicTest {
             assertEquals(source.stacking(), presentation.stacking());
             assertEquals(source.stackingGroup(), presentation.stackingGroup());
             assertEquals(
-                    source.display().tooltip(),
-                    presentation.display().tooltip()
+                    source.display().authoredSummary(),
+                    presentation.display().authoredSummary()
             );
             assertEquals(
                     source.display().flavorText(),
@@ -130,8 +130,8 @@ public final class ObeliskUniqueEquipmentTooltipLogicTest {
             assertEquals(unique.templateId(), presentation.id());
             assertFalse(presentation.display().name().isPresent());
             assertEquals(
-                    unique.content().definition().display().tooltip(),
-                    presentation.display().tooltip()
+                    unique.content().definition().display().authoredSummary(),
+                    presentation.display().authoredSummary()
             );
         }
     }

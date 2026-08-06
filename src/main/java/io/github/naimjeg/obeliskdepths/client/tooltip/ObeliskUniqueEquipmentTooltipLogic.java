@@ -94,7 +94,7 @@ public final class ObeliskUniqueEquipmentTooltipLogic {
         DamageEntryDisplay display = source.display();
         DamageEntryDisplay presentationDisplay = new DamageEntryDisplay(
                 Optional.empty(),
-                display.tooltip(),
+                display.authoredSummary(),
                 display.flavorText(),
                 display.showRuleBreakdown()
         );

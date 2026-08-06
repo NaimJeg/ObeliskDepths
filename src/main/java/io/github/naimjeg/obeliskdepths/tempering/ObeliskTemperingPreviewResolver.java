@@ -118,7 +118,7 @@ public final class ObeliskTemperingPreviewResolver {
                 .orElse(fallbackName);
         Component description = display.flavorText()
                 .map(text -> resolveDisplayText(text, Component.empty()))
-                .orElseGet(() -> display.tooltip()
+                .orElseGet(() -> display.authoredSummary()
                         .stream()
                         .findFirst()
                         .map(text -> resolveDisplayText(text, Component.empty()))

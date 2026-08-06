@@ -85,7 +85,7 @@ final class ObeliskEquipmentCatalogTest {
         assertEquals(
                 2,
                 required(ObeliskEquipmentIds.FIRE_EDGE)
-                        .definition().display().tooltip().size()
+                        .definition().display().authoredSummary().size()
         );
 
         ObeliskTemperingDirectionRegistry.bootstrapBuiltIns();

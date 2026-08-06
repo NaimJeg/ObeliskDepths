@@ -42,8 +42,8 @@ final class ObeliskEquipmentResourceContractTest {
                     chinese,
                     translatable(display.flavorText().orElseThrow()).key()
             );
-            for (var tooltip : display.tooltip()) {
-                DisplayText.Translatable translated = translatable(tooltip);
+            for (var summary : display.authoredSummary()) {
+                DisplayText.Translatable translated = translatable(summary);
                 String key = translated.key();
                 assertDisplayKey(english, chinese, key);
                 assertEquals(

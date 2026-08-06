@@ -188,13 +188,13 @@ public final class ObeliskUniqueEquipmentDefinitions {
             Identifier id,
             String key,
             String name,
-            List<String> tooltips,
+            List<String> authoredSummaries,
             String flavor,
             List<DamageRuleDefinition> rules
     ) {
         return new DamageEntryDefinition(
                 id,
-                display(key, name, tooltips, flavor),
+                display(key, name, authoredSummaries, flavor),
                 DamageEntrySlot.ITEM,
                 rules,
                 DamageEntryStacking.UNIQUE_GROUP,
@@ -230,14 +230,14 @@ public final class ObeliskUniqueEquipmentDefinitions {
     private static DamageEntryDisplay display(
             String key,
             String name,
-            List<String> tooltips,
+            List<String> authoredSummaries,
             String flavor
     ) {
-        List<DisplayText> tooltipText = new ArrayList<>();
-        for (int index = 0; index < tooltips.size(); index++) {
-            tooltipText.add(DisplayText.translatableWithFallback(
+        List<DisplayText> authoredSummaryText = new ArrayList<>();
+        for (int index = 0; index < authoredSummaries.size(); index++) {
+            authoredSummaryText.add(DisplayText.translatableWithFallback(
                     "entry.obeliskdepths.unique." + key + ".tooltip." + index,
-                    tooltips.get(index)
+                    authoredSummaries.get(index)
             ));
         }
         return new DamageEntryDisplay(
@@ -245,7 +245,7 @@ public final class ObeliskUniqueEquipmentDefinitions {
                         "entry.obeliskdepths.unique." + key + ".name",
                         name
                 )),
-                List.copyOf(tooltipText),
+                List.copyOf(authoredSummaryText),
                 Optional.of(DisplayText.translatableWithFallback(
                         "entry.obeliskdepths.unique." + key + ".flavor",
                         flavor
