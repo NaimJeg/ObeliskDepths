@@ -2,7 +2,6 @@ package io.github.naimjeg.obeliskdepths.item;
 
 import io.github.naimjeg.obeliskdepths.dungeon.player.PlayerDungeonReturnResult;
 import io.github.naimjeg.obeliskdepths.dungeon.player.PlayerDungeonReturnService;
-import io.github.naimjeg.obeliskdepths.registry.ModDimensions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,17 +25,7 @@ public class ReturnScrollItem extends Item {
 
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
-        if (!(player instanceof ServerPlayer serverPlayer)) {
-            return InteractionResult.SUCCESS;
-        }
-
-        PlayerDungeonReturnResult result = validateCanStart(serverPlayer);
-        if (result != PlayerDungeonReturnResult.SUCCESS) {
-            sendMessage(serverPlayer, result);
-            return InteractionResult.FAIL;
-        }
-
-        serverPlayer.startUsingItem(hand);
+        player.startUsingItem(hand);
         return InteractionResult.CONSUME;
     }
 
@@ -69,18 +58,6 @@ public class ReturnScrollItem extends Item {
     @Override
     public ItemUseAnimation getUseAnimation(ItemStack itemStack) {
         return ItemUseAnimation.NONE;
-    }
-
-    public static PlayerDungeonReturnResult validateCanStart(ServerPlayer player) {
-        if (!player.isAlive() || player.isSpectator()) {
-            return PlayerDungeonReturnResult.NO_DUNGEON_BINDING;
-        }
-
-        if (!player.level().dimension().equals(ModDimensions.OBELISK_DEPTHS_LEVEL)) {
-            return PlayerDungeonReturnResult.NOT_IN_DUNGEON_DIMENSION;
-        }
-
-        return PlayerDungeonReturnService.checkScrollReturn(player);
     }
 
     public static String translationKey(PlayerDungeonReturnResult result) {

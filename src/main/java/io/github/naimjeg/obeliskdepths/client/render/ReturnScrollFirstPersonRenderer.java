@@ -11,7 +11,6 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
-import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
@@ -244,31 +243,16 @@ public final class ReturnScrollFirstPersonRenderer {
             float frameInterp,
             float progress
     ) {
-        float unfold = ReturnScrollUseMath.unfoldProgress(progress);
-        float width = Mth.lerp(unfold, 0.20F, 1.0F);
         float attune = ReturnScrollUseMath.attunementProgress(progress);
-        float finale = ReturnScrollUseMath.finalShakeProgress(progress);
-
-        int overlayAlpha = (int) (
-                Mth.clamp(
-                        0.25F + attune * 0.35F + finale * 0.4F,
-                        0.0F,
-                        1.0F
-                ) * 255.0F
-        );
-
-        int pulse = 120 + (int) (
-                80.0F * (
-                        0.5F
-                                + 0.5F * Mth.sin(
-                                (player.tickCount + frameInterp) * 0.35F
-                        )
-                )
-        );
+        float pulse = ReturnScrollUseMath.runePulse(player.tickCount + frameInterp);
+        float minAlpha = Mth.lerp(attune, 0.12F, 0.22F);
+        float maxAlpha = Mth.lerp(attune, 0.72F, 1.0F);
+        float runeAlpha = Mth.lerp(pulse, minAlpha, maxAlpha);
+        int overlayAlpha = Mth.clamp(Math.round(runeAlpha * 255.0F), 0, 255);
 
         int overlayColor =
                 (overlayAlpha << 24)
-                        | (pulse << 16)
+                        | (180 << 16)
                         | (220 << 8)
                         | 255;
 
@@ -287,7 +271,6 @@ public final class ReturnScrollFirstPersonRenderer {
                 135.0F,
                 135.0F,
                 -7.0F,
-                width,
                 -1,
                 0.0F
         );
@@ -301,7 +284,6 @@ public final class ReturnScrollFirstPersonRenderer {
                 135.0F,
                 135.0F,
                 -7.0F,
-                width,
                 overlayColor,
                 -0.02F
         );
@@ -316,69 +298,34 @@ public final class ReturnScrollFirstPersonRenderer {
             float bottom,
             float right,
             float top,
-            float widthScale,
             int color,
             float z
     ) {
-        float center = (left + right) * 0.5F;
-        float halfWidth =
-                (right - left)
-                        * 0.5F
-                        * Math.max(0.05F, widthScale);
-
-        float scaledLeft = center - halfWidth;
-        float scaledRight = center + halfWidth;
-
         submitNodeCollector.submitCustomGeometry(
                 poseStack,
                 RenderTypes.text(texture),
                 (pose, buffer) -> {
-                    buffer.addVertex(pose, scaledLeft, bottom, z)
+                    buffer.addVertex(pose, left, bottom, z)
                             .setColor(color)
                             .setUv(0.0F, 1.0F)
                             .setLight(lightCoords);
 
-                    buffer.addVertex(pose, scaledRight, bottom, z)
+                    buffer.addVertex(pose, right, bottom, z)
                             .setColor(color)
                             .setUv(1.0F, 1.0F)
                             .setLight(lightCoords);
 
-                    buffer.addVertex(pose, scaledRight, top, z)
+                    buffer.addVertex(pose, right, top, z)
                             .setColor(color)
                             .setUv(1.0F, 0.0F)
                             .setLight(lightCoords);
 
-                    buffer.addVertex(pose, scaledLeft, top, z)
+                    buffer.addVertex(pose, left, top, z)
                             .setColor(color)
                             .setUv(0.0F, 0.0F)
                             .setLight(lightCoords);
                 }
         );
-    }
-
-    private static void drawQuad(
-            PoseStack poseStack,
-            SubmitNodeCollector submitNodeCollector,
-            RenderType renderType,
-            int lightCoords,
-            float left,
-            float bottom,
-            float right,
-            float top,
-            float widthScale,
-            int color,
-            float z
-    ) {
-        float center = (left + right) * 0.5F;
-        float halfWidth = (right - left) * 0.5F * Math.max(0.05F, widthScale);
-        float scaledLeft = center - halfWidth;
-        float scaledRight = center + halfWidth;
-        submitNodeCollector.submitCustomGeometry(poseStack, renderType, (pose, buffer) -> {
-            buffer.addVertex(pose, scaledLeft, bottom, z).setColor(color).setUv(0.0F, 1.0F).setLight(lightCoords);
-            buffer.addVertex(pose, scaledRight, bottom, z).setColor(color).setUv(1.0F, 1.0F).setLight(lightCoords);
-            buffer.addVertex(pose, scaledRight, top, z).setColor(color).setUv(1.0F, 0.0F).setLight(lightCoords);
-            buffer.addVertex(pose, scaledLeft, top, z).setColor(color).setUv(0.0F, 0.0F).setLight(lightCoords);
-        });
     }
 
     private static float currentProgress(LocalPlayer player, float frameInterp) {

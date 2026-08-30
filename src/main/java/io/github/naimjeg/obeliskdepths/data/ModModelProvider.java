@@ -17,13 +17,24 @@ import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
 import net.minecraft.client.data.models.model.TexturedModel;
+import net.minecraft.core.Holder;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+
+import java.util.stream.Stream;
 
 public final class ModModelProvider extends ModelProvider {
     public ModModelProvider(PackOutput output) {
         super(output, ObeliskDepths.MOD_ID);
+    }
+
+
+    @Override
+    protected Stream<? extends Holder<Item>> getKnownItems() {
+        return super.getKnownItems()
+                .filter(holder -> holder.value() != ModItems.GRANDFATHER.get());
     }
 
     @Override
@@ -63,10 +74,9 @@ public final class ModModelProvider extends ModelProvider {
                         ModelTemplates.FLAT_ITEM
                 )
         );
-//        itemModels.generateFlatItem(
-//                ModItems.GRANDFATHER.get(),
-//                ModelTemplates.FLAT_HANDHELD_ITEM
-//        );
+
+        // Grandfather has a hand-authored custom item model.
+        // Register it with the model collector without generating/overwriting it.
         ModItems.UNIQUE_EQUIPMENT.stream()
                 .filter(item -> item != ModItems.GRANDFATHER)
                 .forEach(item -> itemModels.generateFlatItem(

@@ -24,10 +24,6 @@ public final class PlayerDungeonReturnService {
         return resolveReturn(player).result();
     }
 
-    public static PlayerDungeonReturnResult checkScrollReturn(ServerPlayer player) {
-        return resolveScrollReturn(player).result();
-    }
-
     public static PlayerDungeonReturnResult returnPlayer(ServerPlayer player) {
         ResolvedReturn resolvedReturn = resolveReturn(player);
         if (resolvedReturn.result() != PlayerDungeonReturnResult.SUCCESS) {

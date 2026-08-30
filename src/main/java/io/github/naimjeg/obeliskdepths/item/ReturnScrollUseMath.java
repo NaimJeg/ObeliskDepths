@@ -3,6 +3,8 @@ package io.github.naimjeg.obeliskdepths.item;
 import net.minecraft.util.Mth;
 
 public final class ReturnScrollUseMath {
+    public static final float RUNE_PULSE_SPEED = 0.35F;
+
     private ReturnScrollUseMath() {
     }
 
@@ -24,16 +26,17 @@ public final class ReturnScrollUseMath {
         return smoothStep(remap(progress, 0.0F, 0.20F));
     }
 
-    public static float unfoldProgress(float progress) {
-        return smoothStep(remap(progress, 0.20F, 0.50F));
-    }
-
     public static float attunementProgress(float progress) {
-        return smoothStep(remap(progress, 0.50F, 0.85F));
+        return smoothStep(remap(progress, 0.15F, 0.82F));
     }
 
     public static float finalShakeProgress(float progress) {
-        return smoothStep(remap(progress, 0.85F, 1.0F));
+        return smoothStep(remap(progress, 0.82F, 1.0F));
+    }
+
+    public static float runePulse(float ageInTicks) {
+        float wave = 0.5F + 0.5F * Mth.sin(ageInTicks * RUNE_PULSE_SPEED);
+        return smoothStep(wave);
     }
 
     private static float remap(float value, float min, float max) {
